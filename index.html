@@ -4,28 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ตารางเรียน RACM303 - ระบบตารางสอนภาควิชา</title>
-  
-  <!-- ดึงฟอนต์ Prompt -->
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-navy: #1e3a8a;      /* สีหลัก Navy Blue */
-      --primary-navy-light: #eff6ff;/* สีพื้นหลังหัวข้อวัน */
-      --accent-blue: #0284c7;       /* สีเน้นความโดดเด่น */
-      --bg-main: #f8fafc;           /* สีพื้นหลังหน้าเว็บ */
-      --text-main: #ffffff;         /* สีตัวหนังสือหลัก */
-      --text-muted: #334155;        /* สีตัวหนังสือรอง */
-      --border-color: #cbd5e1;      /* สีเส้นขอบ */
+      --border-color: #cbd5e1;
+      --table-header-bg: #f1f5f9;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --accent: #1e293b;
     }
 
-    * { 
-      box-sizing: border-box; 
-      font-family: 'Prompt', sans-serif; 
-    }
-
+    * { box-sizing: border-box; font-family: 'Sarabun', sans-serif; }
+    
     body { 
-      background-color: var(--bg-main); 
+      background-color: #ffffff; 
       color: var(--text-main); 
       margin: 0; 
       padding: 24px; 
@@ -37,59 +29,53 @@
       margin: 0 auto; 
     }
 
-    /* Header Section (แถบสี Navy Blue สุภาพ เด่นชัด) */
+    /* Header Section */
     header { 
-      background: var(--primary-navy); 
-      color: #ffffff;
-      padding: 24px; 
-      border-radius: 8px; 
+      border-bottom: 2px solid var(--accent); 
+      padding-bottom: 16px; 
       margin-bottom: 24px; 
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
     h1 { 
       margin: 0 0 6px 0; 
-      font-size: 1.4rem; 
-      font-weight: 600; 
-      color: #ffffff;
+      font-size: 1.35rem; 
+      font-weight: 700; 
+      color: var(--accent); 
     }
 
     .subtitle { 
-      color: #e2e8f0; 
+      color: var(--text-muted); 
       font-size: 0.95rem; 
       margin: 0; 
-      font-weight: 300;
     }
 
     /* Filter Controls Panel */
     .filter-panel {
-      background: #ffffff;
+      background: #f8fafc;
       border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 18px;
+      padding: 16px;
       margin-bottom: 20px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      gap: 12px;
     }
 
     .filter-group { 
       display: flex; 
       flex-direction: column; 
-      gap: 6px; 
+      gap: 4px; 
     }
 
     label { 
-      font-size: 0.9rem; 
+      font-size: 0.85rem; 
       font-weight: 600; 
-      color: var(--primary-navy); 
+      color: var(--text-muted); 
     }
 
     select, input {
-      padding: 10px 12px;
+      padding: 8px 10px;
       border: 1px solid var(--border-color);
-      border-radius: 6px;
+      border-radius: 2px;
       font-size: 0.9rem;
       outline: none;
       background: #ffffff;
@@ -97,69 +83,61 @@
     }
 
     select:focus, input:focus { 
-      border-color: var(--accent-blue); 
-      box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
+      border-color: var(--accent); 
     }
 
     /* Summary Bar */
     .summary { 
       font-size: 0.9rem; 
       color: var(--text-muted); 
-      margin-bottom: 16px; 
+      margin-bottom: 12px; 
       display: flex; 
       justify-content: space-between; 
-      border-bottom: 2px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
       padding-bottom: 8px;
-      font-weight: 500;
     }
 
     /* Schedule Timeline & Cards */
     .timeline { 
       display: flex; 
       flex-direction: column; 
-      gap: 10px; 
+      gap: 8px; 
     }
 
     .day-header {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--primary-navy);
-      background: var(--primary-navy-light);
-      border-left: 4px solid var(--primary-navy);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--table-header-bg);
       border-top: 1px solid var(--border-color);
-      border-right: 1px solid var(--border-color);
       border-bottom: 1px solid var(--border-color);
-      padding: 10px 14px;
+      padding: 8px 12px;
       margin-top: 16px;
-      border-radius: 4px;
     }
 
     .card {
       background: #ffffff;
       border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 14px 18px;
+      padding: 12px 16px;
       display: grid;
       grid-template-columns: 140px 1fr auto;
       gap: 16px;
       align-items: center;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
     }
 
     .card:hover {
-      border-color: var(--accent-blue);
-      background-color: #ffffff;
+      background-color: #fafafa;
     }
 
     .time-col { 
       font-weight: 600; 
-      font-size: 0.95rem; 
-      color: var(--primary-navy); 
+      font-size: 0.9rem; 
+      color: var(--text-main); 
     }
 
     .topic-col h3 { 
       margin: 0 0 4px 0; 
-      font-size: 1rem; 
+      font-size: 0.95rem; 
       font-weight: 600; 
       line-height: 1.4; 
       color: var(--text-main);
@@ -167,17 +145,17 @@
 
     .lecturer-name { 
       color: var(--text-muted); 
-      font-size: 0.88rem; 
+      font-size: 0.85rem; 
     }
 
     /* Badges / Formats */
     .badge {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 600;
-      padding: 4px 10px;
+      padding: 3px 8px;
       border: 1px solid var(--border-color);
-      border-radius: 4px;
-      background: #f1f5f9;
+      border-radius: 2px;
+      background: #ffffff;
       white-space: nowrap;
       color: var(--text-main);
     }
@@ -187,7 +165,7 @@
     .badge-hybrid { border-color: #6b21a8; color: #6b21a8; background: #faf5ff; }
 
     @media (max-width: 768px) {
-      .card { grid-template-columns: 1fr; gap: 8px; }
+      .card { grid-template-columns: 1fr; gap: 6px; }
     }
   </style>
 </head>
@@ -196,7 +174,7 @@
 <div class="container">
   <header>
     <h1>ตารางกิจกรรมการเรียนการสอน วิชา RACM303</h1>
-    <p class="subtitle">Community Medicine & Health Systems Science — ระบบตารางการเรียนการสอนและตารางปฏิบัติงาน</p>
+    <p class="subtitle">Community Medicine & Health Systems Science — ระบบตารางสอนและตารางปฏิบัติงาน</p>
   </header>
 
   <!-- Filter Controls -->
@@ -218,7 +196,6 @@
         <option value="สัปดาห์ที่ 1">สัปดาห์ที่ 1</option>
         <option value="สัปดาห์ที่ 2">สัปดาห์ที่ 2</option>
         <option value="สัปดาห์ที่ 3">สัปดาห์ที่ 3</option>
-        <option value="สัปดาห์ที่ 4">สัปดาห์ที่ 4</option>
         <option value="สัปดาห์ที่ 5">สัปดาห์ที่ 5</option>
         <option value="สัปดาห์ที่ 6">สัปดาห์ที่ 6</option>
       </select>
@@ -283,9 +260,6 @@ const scheduleData = [
   { week: "สัปดาห์ที่ 3", date: "วันศุกร์ที่ 11 ธันวาคม 2569", time: "09.00 – 12.00 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 4 (ต่อ): การเตรียมการออกพื้นที่ ครั้งที่ 1", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
   { week: "สัปดาห์ที่ 3", date: "วันศุกร์ที่ 11 ธันวาคม 2569", time: "13.00 – 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 5: ภาคปฏิบัติ 7 เครื่องมือ + เตรียมออกพื้นที่", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
 
-  // เพิ่มสัปดาห์ที่ 4
-  { week: "สัปดาห์ที่ 4", date: "ช่วงการออกปฏิบัติภาคสนาม", time: "ตลอดสัปดาห์", topic: "การเรียนภาคสนาม (Community Field Practice)", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม / พื้นที่ปฏิบัติงาน", format: "Onsite" },
-
   { week: "สัปดาห์ที่ 5", date: "วันอังคารที่ 22 ธันวาคม 2569", time: "09.00 - 12.00 น.", topic: "สอบภาคทฤษฎีระบบ", lecturer: "อ. นพ.ณัฐวุฒิ เอี่ยงธนรัตน์ / ผศ. นพ.สัมฤทธิ์ ศรีธำรงสวัสดิ์", format: "Exam" },
   { week: "สัปดาห์ที่ 5", date: "วันอังคารที่ 22 ธันวาคม 2569", time: "13.00 – 16.30 น.", topic: "Workshop: Systems Thinking in Actions – CLD / System Archetypes", lecturer: "อ. นพ.ณัฐวุฒิ เอี่ยงธนรัตน์", format: "Onsite" },
   { week: "สัปดาห์ที่ 5", date: "วันพุธที่ 23 ธันวาคม 2569", time: "09.00 - 12.00 น.", topic: "Interconnected Six Building Blocks / Health Promotion in Action", lecturer: "วิทยากร", format: "Onsite" },
@@ -298,7 +272,7 @@ const scheduleData = [
   { week: "สัปดาห์ที่ 6", date: "วันจันทร์ที่ 28 ธันวาคม 2569", time: "09.00 – 12.00 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 9", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
   { week: "สัปดาห์ที่ 6", date: "วันจันทร์ที่ 28 ธันวาคม 2569", time: "13.00 - 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 10", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
   { week: "สัปดาห์ที่ 6", date: "วันอังคารที่ 29 ธันวาคม 2569", time: "08.30 - 15.30 น.", topic: "นำเสนอการเรียนรู้ภาคสนาม ระบบบริการสุขภาพ", lecturer: "อ.ที่ปรึกษา / นศพ.", format: "Onsite" },
-  { week: "สัปดาห์ที่ 6", date: "วันอังคารที่ 29 ธันวาคม 2569", time: "15.30 - 17.30 น.", topic: "เตรียมการนำเสนอระบาดวิทยา", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
+  { week: "สัปดาห์ที่ 6", date: "วันอังคารที่ 29 ธันวาคม 2569", time: "15.30 - 17.30 น.", topic: "เตรียมการนำเสนอ", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
   { week: "สัปดาห์ที่ 6", date: "วันพุธที่ 30 ธันวาคม 2569", time: "08.30 - 13.00 น.", topic: "นำเสนอการเรียนรู้ภาคสนาม ระบาดวิทยา", lecturer: "อ.ที่ปรึกษา / นศพ.", format: "Onsite" },
   { week: "สัปดาห์ที่ 6", date: "วันพุธที่ 30 ธันวาคม 2569", time: "13.00 - 16.30 น.", topic: "Self-Directed Learning (SDL)", lecturer: "-", format: "Online" }
 ];
