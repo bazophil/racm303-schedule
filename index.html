@@ -4,20 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ตารางเรียน RACM303 - ระบบตารางสอนภาควิชา</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- เปลี่ยนเป็น Font Prompt อ่านง่าย กึ่งทางการ ตัวใหญ่ชัดเจน -->
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <style>
     :root {
-      --border-color: #cbd5e1;
-      --table-header-bg: #f1f5f9;
-      --text-main: #0f172a;
-      --text-muted: #475569;
-      --accent: #1e293b;
+      --primary-navy: #1e3a8a;       /* สีหลัก Navy Blue */
+      --navy-dark: #0f172a;
+      --navy-light: #e0f2fe;
+      --accent-blue: #0284c7;        /* สีเน้นความโดดเด่น */
+      --bg-main: #f8fafc;            /* สีพื้นหลังหน้าเว็บ */
+      --text-main: #0f172a;          /* สีตัวหนังสือหลัก คมชัด */
+      --text-muted: #334155;         /* สีตัวหนังสือรอง */
+      --border-color: #cbd5e1;       /* สีเส้นขอบ */
     }
 
-    * { box-sizing: border-box; font-family: 'Sarabun', sans-serif; }
-    
+    * { 
+      box-sizing: border-box; 
+      font-family: 'Prompt', sans-serif; 
+    }
+
     body { 
-      background-color: #ffffff; 
+      background-color: var(--bg-main); 
       color: var(--text-main); 
       margin: 0; 
       padding: 24px; 
@@ -25,119 +34,149 @@
     }
 
     .container { 
-      max-width: 1000px; 
+      max-width: 1050px; 
       margin: 0 auto; 
     }
 
     /* Header Section */
     header { 
-      border-bottom: 2px solid var(--accent); 
-      padding-bottom: 16px; 
+      background: var(--primary-navy); 
+      color: #ffffff;
+      padding: 24px; 
+      border-radius: 8px; 
       margin-bottom: 24px; 
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
     h1 { 
-      margin: 0 0 6px 0; 
-      font-size: 1.35rem; 
-      font-weight: 700; 
-      color: var(--accent); 
+      margin: 0 0 8px 0; 
+      font-size: 1.6rem; 
+      font-weight: 600; 
+      color: #ffffff;
     }
 
     .subtitle { 
-      color: var(--text-muted); 
-      font-size: 0.95rem; 
+      color: #e2e8f0; 
+      font-size: 1rem; 
       margin: 0; 
+      font-weight: 300;
     }
 
     /* Filter Controls Panel */
     .filter-panel {
-      background: #f8fafc;
+      background: #ffffff;
       border: 1px solid var(--border-color);
-      padding: 16px;
-      margin-bottom: 20px;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 24px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
     .filter-group { 
       display: flex; 
       flex-direction: column; 
-      gap: 4px; 
+      gap: 6px; 
     }
 
     label { 
-      font-size: 0.85rem; 
+      font-size: 0.95rem; 
       font-weight: 600; 
-      color: var(--text-muted); 
+      color: var(--primary-navy); 
     }
 
     select, input {
-      padding: 8px 10px;
+      padding: 10px 14px;
       border: 1px solid var(--border-color);
-      border-radius: 2px;
-      font-size: 0.9rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
       outline: none;
       background: #ffffff;
       color: var(--text-main);
     }
 
     select:focus, input:focus { 
-      border-color: var(--accent); 
+      border-color: var(--accent-blue); 
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
     }
 
     /* Summary Bar */
     .summary { 
-      font-size: 0.9rem; 
+      font-size: 1rem; 
       color: var(--text-muted); 
-      margin-bottom: 12px; 
+      margin-bottom: 20px; 
       display: flex; 
       justify-content: space-between; 
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 8px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+      font-weight: 500;
     }
 
-    /* Schedule Timeline & Cards */
+    /* Schedule Timeline */
     .timeline { 
       display: flex; 
       flex-direction: column; 
-      gap: 8px; 
+      gap: 12px; 
+    }
+
+    /* การแบ่งสัปดาห์ให้เห็นชัดเจน */
+    .week-header {
+      background: var(--primary-navy);
+      color: #ffffff;
+      font-size: 1.2rem;
+      font-weight: 700;
+      padding: 12px 18px;
+      border-radius: 6px;
+      margin-top: 24px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .day-header {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--accent);
-      background: var(--table-header-bg);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--primary-navy);
+      background: #f1f5f9;
+      border-left: 5px solid var(--accent-blue);
       border-top: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
       border-bottom: 1px solid var(--border-color);
-      padding: 8px 12px;
-      margin-top: 16px;
+      padding: 10px 16px;
+      margin-top: 8px;
+      border-radius: 4px;
     }
 
+    /* Cards */
     .card {
       background: #ffffff;
       border: 1px solid var(--border-color);
-      padding: 12px 16px;
+      border-radius: 6px;
+      padding: 16px 20px;
       display: grid;
-      grid-template-columns: 140px 1fr auto;
-      gap: 16px;
+      grid-template-columns: 160px 1fr auto;
+      gap: 20px;
       align-items: center;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
     }
 
     .card:hover {
-      background-color: #fafafa;
+      border-color: var(--accent-blue);
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.15);
     }
 
     .time-col { 
-      font-weight: 600; 
-      font-size: 0.9rem; 
-      color: var(--text-main); 
+      font-weight: 700; 
+      font-size: 1.05rem; 
+      color: var(--primary-navy); 
     }
 
     .topic-col h3 { 
-      margin: 0 0 4px 0; 
-      font-size: 0.95rem; 
+      margin: 0 0 6px 0; 
+      font-size: 1.1rem; 
       font-weight: 600; 
       line-height: 1.4; 
       color: var(--text-main);
@@ -145,17 +184,18 @@
 
     .lecturer-name { 
       color: var(--text-muted); 
-      font-size: 0.85rem; 
+      font-size: 0.95rem; 
+      font-weight: 400;
     }
 
     /* Badges / Formats */
     .badge {
-      font-size: 0.75rem;
+      font-size: 0.85rem;
       font-weight: 600;
-      padding: 3px 8px;
+      padding: 6px 12px;
       border: 1px solid var(--border-color);
-      border-radius: 2px;
-      background: #ffffff;
+      border-radius: 4px;
+      background: #f1f5f9;
       white-space: nowrap;
       color: var(--text-main);
     }
@@ -163,9 +203,12 @@
     .badge-exam { border-color: #991b1b; color: #991b1b; background: #fef2f2; }
     .badge-online { border-color: #c2410c; color: #c2410c; background: #fff7ed; }
     .badge-hybrid { border-color: #6b21a8; color: #6b21a8; background: #faf5ff; }
+    .badge-field { border-color: #15803d; color: #15803d; background: #f0fdf4; }
 
     @media (max-width: 768px) {
-      .card { grid-template-columns: 1fr; gap: 6px; }
+      .card { grid-template-columns: 1fr; gap: 10px; }
+      .time-col { font-size: 1rem; }
+      .topic-col h3 { font-size: 1.05rem; }
     }
   </style>
 </head>
@@ -180,8 +223,8 @@
   <!-- Filter Controls -->
   <div class="filter-panel">
     <div class="filter-group">
-      <label for="searchInput">ค้นหาหัวข้อ / กิจกรรม</label>
-      <input type="text" id="searchInput" placeholder="ระบุคำค้นหา...">
+      <label for="searchInput">ค้นหาหัวข้อ / กิจกรรม / อาจารย์</label>
+      <input type="text" id="searchInput" placeholder="พิมพ์คำค้นหา เช่น HS, EP, ชื่ออาจารย์...">
     </div>
     <div class="filter-group">
       <label for="lecturerFilter">กรองตามรายชื่ออาจารย์</label>
@@ -196,6 +239,7 @@
         <option value="สัปดาห์ที่ 1">สัปดาห์ที่ 1</option>
         <option value="สัปดาห์ที่ 2">สัปดาห์ที่ 2</option>
         <option value="สัปดาห์ที่ 3">สัปดาห์ที่ 3</option>
+        <option value="สัปดาห์ที่ 4">สัปดาห์ที่ 4 (ภาคสนาม)</option>
         <option value="สัปดาห์ที่ 5">สัปดาห์ที่ 5</option>
         <option value="สัปดาห์ที่ 6">สัปดาห์ที่ 6</option>
       </select>
@@ -211,7 +255,20 @@
 </div>
 
 <script>
+// รายชื่ออาจารย์ทั้งหมดในรายวิชา
+const lecturerList = [
+  "ณัฐวุฒิ", "สัมฤทธิ์", "ภูษิต", "เริงฤดี", "ฉัตรชัย", "วริษา", 
+  "จักรกฤษณ์", "สวนีย์", "ปวินท์", "วิชัย", "ฉัฐญาณ์", "วิชช์", "ภรัณยู", "พีรสิชฌ์"
+];
+
+// ข้อความรวมอาจารย์ทุกคนสำหรับกิจกรรมกลุ่มย่อย/ภาคสนาม
+const allLecturersText = "อ.ที่ปรึกษาประจำกลุ่ม (อ.ณัฐวุฒิ, อ.สัมฤทธิ์, อ.ภูษิต, อ.เริงฤดี, อ.ฉัตรชัย, อ.วริษา, อ.จักรกฤษณ์, อ.สวนีย์, อ.ปวินท์, อ.วิชัย, อ.ฉัฐญาณ์, อ.วิชช์, อ.ภรัณยู, อ.พีรสิชฌ์)";
+
+// รายชื่ออาจารย์ฝั่งระบาดวิทยาสำหรับคลาส Exercise/Q&A
+const epiLecturersText = "อาจารย์กลุ่มวิชาระบาดวิทยา (อ.จักรกฤษณ์, อ.สวนีย์, อ.ปวินท์, ศ.วิชัย, ผศ.ฉัฐญาณ์)";
+
 const scheduleData = [
+  // สัปดาห์ที่ 1
   { week: "สัปดาห์ที่ 1", date: "วันพุธที่ 25 พฤศจิกายน 2569", time: "09.00 – 09.30 น.", topic: "Orientation to Community Medicine and Health Systems Science", lecturer: "อ. นพ.ณัฐวุฒิ เอี่ยงธนรัตน์", format: "Onsite" },
   { week: "สัปดาห์ที่ 1", date: "วันพุธที่ 25 พฤศจิกายน 2569", time: "09.30 - 12.00 น.", topic: "Systems & Systems Thinking", lecturer: "อ. นพ.ณัฐวุฒิ เอี่ยงธนรัตน์", format: "Onsite" },
   { week: "สัปดาห์ที่ 1", date: "วันพุธที่ 25 พฤศจิกายน 2569", time: "13.00 – 16.00 น.", topic: "Bedside to Systems-Based Practice: Global/Planetary Health & HPSR", lecturer: "อ. นพ.ณัฐวุฒิ เอี่ยงธนรัตน์", format: "Onsite" },
@@ -224,11 +281,12 @@ const scheduleData = [
   { week: "สัปดาห์ที่ 1", date: "วันพฤหัสบดีที่ 26 พฤศจิกายน 2569", time: "10.10 - 12.00 น.", topic: "Discussion: Health & Determinants of health (กลุ่ม 5)", lecturer: "อ. พญ.วริษา สุนทรวินิต", format: "Onsite", isGroup: true },
   { week: "สัปดาห์ที่ 1", date: "วันพฤหัสบดีที่ 26 พฤศจิกายน 2569", time: "10.10 - 12.00 น.", topic: "Discussion: Health & Determinants of health (กลุ่ม 6)", lecturer: "อ. นพ.ณัฐวุฒิ เอี่ยงธนรัตน์ / นพ.ภรัณยู โอสถธนากร", format: "Onsite", isGroup: true },
   
-  { week: "สัปดาห์ที่ 1", date: "วันพฤหัสบดีที่ 26 พฤศจิกายน 2569", time: "13.00 – 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 1: การทำความรู้จักกันและชี้แจงภาระกิจก่อนและระหว่างออกภาคสนาม", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
+  { week: "สัปดาห์ที่ 1", date: "วันพฤหัสบดีที่ 26 พฤศจิกายน 2569", time: "13.00 – 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 1: การทำความรู้จักกันและชี้แจงภาระกิจก่อนและระหว่างออกภาคสนาม", lecturer: allLecturersText, format: "Onsite", isGroup: true },
   { week: "สัปดาห์ที่ 1", date: "วันศุกร์ที่ 27 พฤศจิกายน 2569", time: "09.00 – 11.00 น.", topic: "EP1: Introduction / EP2-3: Diagnostic Test & Errors in epidemiology", lecturer: "อ. นพ.จักรกฤษณ์ เอื้อสุนทรวัฒนา", format: "Hybrid" },
-  { week: "สัปดาห์ที่ 1", date: "วันศุกร์ที่ 27 พฤศจิกายน 2569", time: "11.00 – 12.00 น.", topic: "EXERCISE 2 & 3: Diagnostic Test & Errors", lecturer: "-", format: "Online" },
-  { week: "สัปดาห์ที่ 1", date: "วันศุกร์ที่ 27 พฤศจิกายน 2569", time: "13.00 - 16.30 น.", topic: "Exercise Day 1", lecturer: "-", format: "Online" },
+  { week: "สัปดาห์ที่ 1", date: "วันศุกร์ที่ 27 พฤศจิกายน 2569", time: "11.00 – 12.00 น.", topic: "EXERCISE 2 & 3: Diagnostic Test & Errors", lecturer: epiLecturersText, format: "Online" },
+  { week: "สัปดาห์ที่ 1", date: "วันศุกร์ที่ 27 พฤศจิกายน 2569", time: "13.00 - 16.30 น.", topic: "Exercise Day 1", lecturer: epiLecturersText, format: "Online" },
 
+  // สัปดาห์ที่ 2
   { week: "สัปดาห์ที่ 2", date: "วันจันทร์ที่ 30 พฤศจิกายน 2569", time: "09.00 - 10.00 น.", topic: "HS2: Health services I", lecturer: "อ. นพ.ณัฐวุฒิ เอี่ยงธนรัตน์", format: "Onsite" },
   { week: "สัปดาห์ที่ 2", date: "วันจันทร์ที่ 30 พฤศจิกายน 2569", time: "10.10 - 12.00 น.", topic: "Discussion: Health services I (Small Groups 1-6)", lecturer: "อ.ภูษิต, รศ.เริงฤดี, อ.ฉัตรชัย, อ.วริษา, อ.ณัฐวุฒิ/นพ.ภรัณยู, ผศ.สัมฤทธิ์/นพ.พีรสิชฌ์", format: "Onsite", isGroup: true },
   { week: "สัปดาห์ที่ 2", date: "วันจันทร์ที่ 30 พฤศจิกายน 2569", time: "13.00 - 14.00 น.", topic: "HS3: Health services II", lecturer: "อ. นพ.ภูษิต ประคองสาย", format: "Onsite" },
@@ -240,48 +298,50 @@ const scheduleData = [
   { week: "สัปดาห์ที่ 2", date: "วันอังคารที่ 1 ธันวาคม 2569", time: "14.10 - 16.30 น.", topic: "Discussion: Primary health care & Primary care (Small Groups 1-6)", lecturer: "อ.วริษา, อ.ณัฐวุฒิ/นพ.ภรัณยู, ผศ.สัมฤทธิ์/นพ.พีรสิชฌ์, อ.ภูษิต, รศ.เริงฤดี, อ.ฉัตรชัย", format: "Onsite", isGroup: true },
 
   { week: "สัปดาห์ที่ 2", date: "วันพุธที่ 2 ธันวาคม 2569", time: "09.00 – 12.00 น.", topic: "EP4: Study designs & EP5: Disease surveillance", lecturer: "อ. พญ.สวนีย์ ศรีเจริญธรรม", format: "Hybrid" },
-  { week: "สัปดาห์ที่ 2", date: "วันพุธที่ 2 ธันวาคม 2569", time: "13.00 - 16.00 น.", topic: "EXERCISE 4 & 5", lecturer: "-", format: "Online" },
-  { week: "สัปดาห์ที่ 2", date: "วันพุธที่ 2 ธันวาคม 2569", time: "16.00 - 16.30 น.", topic: "Q&A Exercise Day 1, 2", lecturer: "อ.จักรกฤษณ์, อ.สวนีย์", format: "Online" },
+  { week: "สัปดาห์ที่ 2", date: "วันพุธที่ 2 ธันวาคม 2569", time: "13.00 - 16.00 น.", topic: "EXERCISE 4 & 5", lecturer: epiLecturersText, format: "Online" },
+  { week: "สัปดาห์ที่ 2", date: "วันพุธที่ 2 ธันวาคม 2569", time: "16.00 - 16.30 น.", topic: "Q&A Exercise Day 1, 2", lecturer: "อ.จักรกฤษณ์, อ.สวนีย์, อ.ปวินท์, ศ.วิชัย, ผศ.ฉัฐญาณ์", format: "Online" },
 
   { week: "สัปดาห์ที่ 2", date: "วันพฤหัสบดีที่ 3 ธันวาคม 2569", time: "09.00 – 12.00 น.", topic: "EP6: Burden of disease / EP7: Health survey / EP8: Experimental", lecturer: "อ.ปวินท์, ศ.วิชัย, ผศ.ฉัฐญาณ์", format: "Hybrid" },
   { week: "สัปดาห์ที่ 2", date: "วันพฤหัสบดีที่ 3 ธันวาคม 2569", time: "13.00 - 14.00 น.", topic: "EP5: EBM (Evidence-Based Medicine)", lecturer: "ผศ. พญ.ฉัฐญาณ์ วงศ์รัฐนันท์", format: "Hybrid" },
-  { week: "สัปดาห์ที่ 2", date: "วันพฤหัสบดีที่ 3 ธันวาคม 2569", time: "14.00 - 16.00 น.", topic: "EXERCISE 6 & 7", lecturer: "-", format: "Online" },
-  { week: "สัปดาห์ที่ 2", date: "วันพฤหัสบดีที่ 3 ธันวาคม 2569", time: "16.00 – 16.30 น.", topic: "Q&A Exercise Day 3", lecturer: "ผศ. พญ.ฉัฐญาณ์ วงศ์รัฐนันท์", format: "Online" },
+  { week: "สัปดาห์ที่ 2", date: "วันพฤหัสบดีที่ 3 ธันวาคม 2569", time: "14.00 - 16.00 น.", topic: "EXERCISE 6 & 7", lecturer: epiLecturersText, format: "Online" },
+  { week: "สัปดาห์ที่ 2", date: "วันพฤหัสบดีที่ 3 ธันวาคม 2569", time: "16.00 – 16.30 น.", topic: "Q&A Exercise Day 3", lecturer: epiLecturersText, format: "Online" },
 
   { week: "สัปดาห์ที่ 2", date: "วันศุกร์ที่ 4 ธันวาคม 2569", time: "09.00 - 10.00 น.", topic: "HS6: Health insurance & payment", lecturer: "ผศ. นพ.สัมฤทธิ์ / นพ.พีรสิชฌ์", format: "Onsite" },
   { week: "สัปดาห์ที่ 2", date: "วันศุกร์ที่ 4 ธันวาคม 2569", time: "10.10 - 12.00 น.", topic: "Discussion: Health insurance & payment (Small Groups 1-6)", lecturer: "อ.ณัฐวุฒิ, ผศ.สัมฤทธิ์, อ.ภูษิต, รศ.เริงฤดี, อ.ฉัตรชัย, อ.วริษา", format: "Onsite", isGroup: true },
-  { week: "สัปดาห์ที่ 2", date: "วันศุกร์ที่ 4 ธันวาคม 2569", time: "13.00 – 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 2: งานกลุ่มก่อนและระหว่างออกภาคสนาม", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
+  { week: "สัปดาห์ที่ 2", date: "วันศุกร์ที่ 4 ธันวาคม 2569", time: "13.00 – 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 2: งานกลุ่มก่อนและระหว่างออกภาคสนาม", lecturer: allLecturersText, format: "Onsite", isGroup: true },
 
-  { week: "สัปดาห์ที่ 3", date: "วันอังคารที่ 8 ธันวาคม 2569", time: "09.00 - 12.00 น.", topic: "สอบภาคทฤษฎีระบาด", lecturer: "อ. พญ.สวนีย์ ศรีเจริญธรรม / จนท.ภาควิชาฯ", format: "Exam" },
+  // สัปดาห์ที่ 3
+  { week: "สัปดาห์ที่ 3", date: "วันอังคารที่ 8 ธันวาคม 2569", time: "09.00 - 12.00 น.", topic: "สอบภาคทฤษฎีระบาด", lecturer: epiLecturersText + " / จนท.ภาควิชาฯ", format: "Exam" },
   { week: "สัปดาห์ที่ 3", date: "วันอังคารที่ 8 ธันวาคม 2569", time: "13.00 – 14.30 น.", topic: "โปรแกรมวิเคราะห์ข้อมูล SPSS", lecturer: "อ. พญ.สวนีย์ ศรีเจริญธรรม", format: "Onsite" },
-  { week: "สัปดาห์ที่ 3", date: "วันอังคารที่ 8 ธันวาคม 2569", time: "14.30 – 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 3", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
+  { week: "สัปดาห์ที่ 3", date: "วันอังคารที่ 8 ธันวาคม 2569", time: "14.30 – 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 3", lecturer: allLecturersText, format: "Onsite", isGroup: true },
   { week: "สัปดาห์ที่ 3", date: "วันพุธที่ 9 ธันวาคม 2569", time: "09.00 - 12.00 น.", topic: "Community Approach / District health Systems – Learning How to Learn", lecturer: "วิทยากร", format: "Onsite" },
-  { week: "สัปดาห์ที่ 3", date: "วันพุธที่ 9 ธันวาคม 2569", time: "14.30 – 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 4", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
-  { week: "สัปดาห์ที่ 3", date: "วันศุกร์ที่ 11 ธันวาคม 2569", time: "09.00 – 12.00 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 4 (ต่อ): การเตรียมการออกพื้นที่ ครั้งที่ 1", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
-  { week: "สัปดาห์ที่ 3", date: "วันศุกร์ที่ 11 ธันวาคม 2569", time: "13.00 – 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 5: ภาคปฏิบัติ 7 เครื่องมือ + เตรียมออกพื้นที่", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
+  { week: "สัปดาห์ที่ 3", date: "วันพุธที่ 9 ธันวาคม 2569", time: "14.30 – 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 4", lecturer: allLecturersText, format: "Onsite", isGroup: true },
+  { week: "สัปดาห์ที่ 3", date: "วันศุกร์ที่ 11 ธันวาคม 2569", time: "09.00 – 12.00 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 4 (ต่อ): การเตรียมการออกพื้นที่ ครั้งที่ 1", lecturer: allLecturersText, format: "Onsite", isGroup: true },
+  { week: "สัปดาห์ที่ 3", date: "วันศุกร์ที่ 11 ธันวาคม 2569", time: "13.00 – 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 5: ภาคปฏิบัติ 7 เครื่องมือ + เตรียมออกพื้นที่", lecturer: allLecturersText, format: "Onsite", isGroup: true },
 
+  // สัปดาห์ที่ 4 (เพิ่มสัปดาห์ภาคสนามตามโจทย์)
+  { week: "สัปดาห์ที่ 4", date: "สัปดาห์การออกปฏิบัติภาคสนาม", time: "ตลอดสัปดาห์", topic: "การเรียนภาคสนาม (Community Field Practice)", lecturer: allLecturersText, format: "Field" },
+
+  // สัปดาห์ที่ 5
   { week: "สัปดาห์ที่ 5", date: "วันอังคารที่ 22 ธันวาคม 2569", time: "09.00 - 12.00 น.", topic: "สอบภาคทฤษฎีระบบ", lecturer: "อ. นพ.ณัฐวุฒิ เอี่ยงธนรัตน์ / ผศ. นพ.สัมฤทธิ์ ศรีธำรงสวัสดิ์", format: "Exam" },
   { week: "สัปดาห์ที่ 5", date: "วันอังคารที่ 22 ธันวาคม 2569", time: "13.00 – 16.30 น.", topic: "Workshop: Systems Thinking in Actions – CLD / System Archetypes", lecturer: "อ. นพ.ณัฐวุฒิ เอี่ยงธนรัตน์", format: "Onsite" },
   { week: "สัปดาห์ที่ 5", date: "วันพุธที่ 23 ธันวาคม 2569", time: "09.00 - 12.00 น.", topic: "Interconnected Six Building Blocks / Health Promotion in Action", lecturer: "วิทยากร", format: "Onsite" },
   { week: "สัปดาห์ที่ 5", date: "วันพุธที่ 23 ธันวาคม 2569", time: "13.00 - 16.30 น.", topic: "Panel Discussion: Young-Gen Systems-based Practitioner", lecturer: "วิทยากร", format: "Onsite" },
   { week: "สัปดาห์ที่ 5", date: "วันพฤหัสบดีที่ 24 ธันวาคม 2569", time: "09.00 - 12.00 น.", topic: "Consultation & Workshop: นโยบายและ Policy Advocacy", lecturer: "วิทยากร", format: "Onsite" },
-  { week: "สัปดาห์ที่ 5", date: "วันพฤหัสบดีที่ 24 ธันวาคม 2569", time: "13.00 - 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 6", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
-  { week: "สัปดาห์ที่ 5", date: "วันศุกร์ที่ 25 ธันวาคม 2569", time: "09.00 - 12.00 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 7", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
-  { week: "สัปดาห์ที่ 5", date: "วันศุกร์ที่ 25 ธันวาคม 2569", time: "13.00 - 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 8", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
+  { week: "สัปดาห์ที่ 5", date: "วันพฤหัสบดีที่ 24 ธันวาคม 2569", time: "13.00 - 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 6", lecturer: allLecturersText, format: "Onsite", isGroup: true },
+  { week: "สัปดาห์ที่ 5", date: "วันศุกร์ที่ 25 ธันวาคม 2569", time: "09.00 - 12.00 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 7", lecturer: allLecturersText, format: "Onsite", isGroup: true },
+  { week: "สัปดาห์ที่ 5", date: "วันศุกร์ที่ 25 ธันวาคม 2569", time: "13.00 - 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 8", lecturer: allLecturersText, format: "Onsite", isGroup: true },
 
-  { week: "สัปดาห์ที่ 6", date: "วันจันทร์ที่ 28 ธันวาคม 2569", time: "09.00 – 12.00 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 9", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
-  { week: "สัปดาห์ที่ 6", date: "วันจันทร์ที่ 28 ธันวาคม 2569", time: "13.00 - 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 10", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
-  { week: "สัปดาห์ที่ 6", date: "วันอังคารที่ 29 ธันวาคม 2569", time: "08.30 - 15.30 น.", topic: "นำเสนอการเรียนรู้ภาคสนาม ระบบบริการสุขภาพ", lecturer: "อ.ที่ปรึกษา / นศพ.", format: "Onsite" },
-  { week: "สัปดาห์ที่ 6", date: "วันอังคารที่ 29 ธันวาคม 2569", time: "15.30 - 17.30 น.", topic: "เตรียมการนำเสนอ", lecturer: "อ.ที่ปรึกษาประจำกลุ่ม", format: "Onsite" },
-  { week: "สัปดาห์ที่ 6", date: "วันพุธที่ 30 ธันวาคม 2569", time: "08.30 - 13.00 น.", topic: "นำเสนอการเรียนรู้ภาคสนาม ระบาดวิทยา", lecturer: "อ.ที่ปรึกษา / นศพ.", format: "Onsite" },
+  // สัปดาห์ที่ 6
+  { week: "สัปดาห์ที่ 6", date: "วันจันทร์ที่ 28 ธันวาคม 2569", time: "09.00 – 12.00 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 9", lecturer: allLecturersText, format: "Onsite", isGroup: true },
+  { week: "สัปดาห์ที่ 6", date: "วันจันทร์ที่ 28 ธันวาคม 2569", time: "13.00 - 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 10", lecturer: allLecturersText, format: "Onsite", isGroup: true },
+  { week: "สัปดาห์ที่ 6", date: "วันอังคารที่ 29 ธันวาคม 2569", time: "08.30 - 15.30 น.", topic: "นำเสนอการเรียนรู้ภาคสนาม ระบบบริการสุขภาพ", lecturer: allLecturersText + " / นศพ.", format: "Onsite" },
+  { week: "สัปดาห์ที่ 6", date: "วันอังคารที่ 29 ธันวาคม 2569", time: "15.30 - 17.30 น.", topic: "เตรียมการนำเสนอระบาดวิทยา", lecturer: allLecturersText, format: "Onsite" },
+  { week: "สัปดาห์ที่ 6", date: "วันพุธที่ 30 ธันวาคม 2569", time: "08.30 - 13.00 น.", topic: "นำเสนอการเรียนรู้ภาคสนาม ระบาดวิทยา", lecturer: allLecturersText + " / นศพ.", format: "Onsite" },
   { week: "สัปดาห์ที่ 6", date: "วันพุธที่ 30 ธันวาคม 2569", time: "13.00 - 16.30 น.", topic: "Self-Directed Learning (SDL)", lecturer: "-", format: "Online" }
 ];
 
-const lecturerList = [
-  "ณัฐวุฒิ", "สัมฤทธิ์", "ภูษิต", "เริงฤดี", "ฉัตรชัย", "วริษา", 
-  "จักรกฤษณ์", "สวนีย์", "ปวินท์", "วิชัย", "ฉัฐญาณ์", "วิชช์", "ภรัณยู", "พีรสิชฌ์"
-];
-
+// ดึงรายชื่ออาจารย์เข้า Dropdown
 const lecturerSelect = document.getElementById("lecturerFilter");
 lecturerList.sort().forEach(name => {
   const opt = document.createElement("option");
@@ -299,6 +359,7 @@ function getBadge(format, isGroup) {
   if (format === "Exam") return '<span class="badge badge-exam">[ สอบ ]</span>';
   if (format === "Online") return '<span class="badge badge-online">[ Online ]</span>';
   if (format === "Hybrid") return '<span class="badge badge-hybrid">[ Hybrid ]</span>';
+  if (format === "Field") return '<span class="badge badge-field">[ ออกภาคสนาม ]</span>';
   if (isGroup) return '<span class="badge">[ กลุ่มย่อย ]</span>';
   return '<span class="badge">[ Onsite ]</span>';
 }
@@ -309,6 +370,7 @@ function renderSchedule() {
   const selectedWeek = weekSelect.value;
 
   container.innerHTML = "";
+  let lastWeek = "";
   let lastDate = "";
   let count = 0;
 
@@ -321,21 +383,31 @@ function renderSchedule() {
     if (matchSearch && matchLecturer && matchWeek) {
       count++;
 
+      // สร้าง Header ตัวใหญ่แยกสัปดาห์
+      if (item.week !== lastWeek) {
+        lastWeek = item.week;
+        const wHeader = document.createElement("div");
+        wHeader.className = "week-header";
+        wHeader.innerHTML = `📌 ${item.week}`;
+        container.appendChild(wHeader);
+      }
+
+      // Header แยกวัน
       if (item.date !== lastDate) {
         lastDate = item.date;
         const dHeader = document.createElement("div");
         dHeader.className = "day-header";
-        dHeader.textContent = `${item.week} — ${item.date}`;
+        dHeader.textContent = item.date;
         container.appendChild(dHeader);
       }
 
       const card = document.createElement("div");
       card.className = "card";
       card.innerHTML = `
-        <div class="time-col">${item.time}</div>
+        <div class="time-col">⏱️ ${item.time}</div>
         <div class="topic-col">
           <h3>${item.topic}</h3>
-          <div class="lecturer-name">ผู้สอน: ${item.lecturer}</div>
+          <div class="lecturer-name">👤 ผู้สอน: ${item.lecturer}</div>
         </div>
         <div>${getBadge(item.format, item.isGroup)}</div>
       `;
