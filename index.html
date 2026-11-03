@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ระบบตารางเรียน & รายชื่อนักศึกษา RACM303</title>
   
-  <!-- Font Prompt -->
+  <!-- Font Prompt อ่านง่าย กึ่งทางการ ตัวใหญ่ชัดเจน -->
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- PapaParse Library -->
+  <!-- PapaParse Library สำหรับดึงและแปลง CSV -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   
   <style>
@@ -39,7 +39,7 @@
     h1 { margin: 0 0 8px 0; font-size: 1.6rem; font-weight: 600; color: #ffffff; }
     .subtitle { color: #e2e8f0; font-size: 0.95rem; margin: 0; font-weight: 300; }
 
-    /* Filter Controls Panel */
+    /* Filter Controls Panel (5 ตัวเลือกกรอง) */
     .filter-panel {
       background: #ffffff;
       border: 1px solid var(--border-color);
@@ -195,7 +195,7 @@
 <div class="container">
   <header>
     <h1>ระบบตารางกิจกรรมการเรียนการสอน (มัลติชั้นปี & กลุ่มย่อย)</h1>
-    <p class="subtitle">ดึงข้อมูลตารางและรายชื่อนักศึกษาจาก Google Sheets อัตโนมัติ</p>
+    <p class="subtitle">ดึงข้อมูลตารางเรียนและรายชื่อนักศึกษาจาก Google Sheets อัตโนมัติ</p>
   </header>
 
   <!-- Filter Panel -->
@@ -224,7 +224,6 @@
     <div class="filter-group">
       <label for="areaFilter">3. กลุ่มพื้นที่ (9 กลุ่ม)</label>
       <select id="areaFilter">
-        <option value="all">-- ทุกกลุ่มพื้นที่ --</option>
         <option value="all">-- ทุกกลุ่มพื้นที่ --</option>
         <option value="1">กุฉินารายณ์</option>
         <option value="2">ด่านซ้าย</option>
@@ -265,7 +264,7 @@
     </div>
   </div>
 
-  <!-- กล่องแสดงสรุปข้อมูลกลุ่มย่อย -->
+  <!-- กล่องแสดงสรุปข้อมูลกลุ่มย่อย และรายชื่อเพื่อนร่วมกลุ่ม -->
   <div class="group-info-card" id="groupInfoCard">
     <div class="group-info-header">
       <div class="group-info-title" id="groupTitle">สรุปข้อมูลกลุ่ม</div>
@@ -284,16 +283,16 @@
 </div>
 
 <script>
-// 1. ลิงก์ CSV ตารางเรียน
+// 📌 1. ลิงก์ CSV ตารางเรียน
 const scheduleCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTVCp6_8XOpTvWsEDQIKVjl-0VNK5gwlXXbIbtrrOlb80CYjon9cTJf5-W-al76r7bLG5gP21NInkz7/pub?gid=1642042382&single=true&output=csv';
 
-// 2. ลิงก์ CSV รายชื่อนักศึกษา (gid=262704458)
-const studentsCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTVCp6_8XOpTvWsEDQIKVjl-0VNK5gwlXXbIbtrrOlb80CYjon9cTJf5-W-al76r7bLG5gP21NInkz7/pub?gid=262704458&single=true&output=csv';
+// 📌 2. ลิงก์ CSV รายชื่อนักศึกษา (gid=262704458)
+const studentsCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTVCp6_8XOpTvWsEDQIKVjl-0VNK5gwlXXbIbtrrOlb80CYjon9cTJf5-W-al76r7bLG5gP21NInkz7/pub?gid=1642042382&single=true&output=csv';
 
 let allScheduleData = [];
 let allStudentsData = [];
 
-// โหลดข้อมูล CSV ทั้ง 2 ไฟล์พร้อมกัน
+// ดึงข้อมูล CSV ทั้ง 2 ลิงก์ขนานกัน
 function loadAllCSVData() {
   let loadedCount = 0;
 
@@ -312,7 +311,7 @@ function loadAllCSVData() {
     }
   });
 
-  // โหลดรายชื่อนักศึกษา
+  // โหลดรายชื่อนักศึกษาจาก CSV sheet ที่สอง
   Papa.parse(studentsCsvUrl, {
     download: true,
     header: true,
@@ -337,7 +336,7 @@ function renderSchedule() {
   const selectedLecturer = document.getElementById('lecturerFilter').value;
   const query = document.getElementById('searchInput').value.toLowerCase().trim();
 
-  // อัปเดตรายชื่อนักศึกษาตามกลุ่มที่เลือก
+  // อัปเดตรายชื่อนักศึกษาจริงจาก CSV ตามกลุ่มที่เลือก
   updateGroupInfoCard(selectedGroup, selectedAreaGroup, query);
 
   const container = document.getElementById('scheduleContainer');
@@ -349,18 +348,18 @@ function renderSchedule() {
   allScheduleData.forEach(item => {
     const matchYear = !item.year || item.year === selectedYear;
     
-    // ตามกลุ่ม Discussion
+    // กรองกลุ่ม Discussion
     const matchGroup = (selectedGroup === 'all') || 
                        (item.groupId === 'all' || item.groupId === selectedGroup || item.discGroup === selectedGroup);
 
-    // ตามกลุ่มพื้นที่
+    // กรองกลุ่มพื้นที่
     const matchArea = (selectedAreaGroup === 'all') || 
                       (!item.areaGroup || item.areaGroup === 'all' || item.areaGroup === selectedAreaGroup);
 
-    // อาจารย์
+    // กรองอาจารย์
     const matchLecturer = !selectedLecturer || (item.lecturer && item.lecturer.includes(selectedLecturer));
 
-    // คำค้นหา
+    // กรองคำค้นหา
     const matchSearch = !query || 
                         (item.topic && item.topic.toLowerCase().includes(query)) ||
                         (item.lecturer && item.lecturer.toLowerCase().includes(query)) ||
@@ -420,11 +419,11 @@ function renderSchedule() {
   document.getElementById('resultCount').textContent = `แสดงผลทั้งสิ้น ${count} รายการ (${selectedYear})`;
 }
 
-// 📌 ฟังก์ชันอัปเดตและกรองรายชื่อนักศึกษาตามกลุ่ม Discussion & กลุ่มพื้นที่
+// 📌 ฟังก์ชันกรองและดึงรายชื่อนักศึกษาจากไฟล์ CSV แผ่นที่ 2 แบบ Dynamic
 function updateGroupInfoCard(discGroup, areaGroup, searchQuery) {
   const card = document.getElementById('groupInfoCard');
   
-  // แสดงกล่องเมื่อมีการเลือกกลุ่มย่อย หรือมีคำค้นหานักศึกษา
+  // แสดงกล่องเมื่อเลือกกลุ่ม Discussion, เลือกกลุ่มพื้นที่ หรือพิมพ์ค้นหานักศึกษา
   if (discGroup === 'all' && areaGroup === 'all' && !searchQuery) {
     card.style.display = 'none';
     return;
@@ -432,25 +431,23 @@ function updateGroupInfoCard(discGroup, areaGroup, searchQuery) {
 
   card.style.display = 'block';
   
-  let titleText = '📌 รายชื่อนักศึกษาที่กรองตามเงื่อนไข: ';
   let detailsText = '';
-  
   if (discGroup !== 'all') detailsText += `<b>Discussion:</b> กลุ่ม ${discGroup} `;
   if (areaGroup !== 'all') detailsText += `${detailsText ? '| ' : ''}<b>พื้นที่:</b> กลุ่ม ${areaGroup}`;
   
-  document.getElementById('groupTitle').textContent = titleText;
+  document.getElementById('groupTitle').textContent = `📌 รายชื่อนักศึกษาที่กรองตามเงื่อนไข`;
   document.getElementById('groupDetails').innerHTML = detailsText;
   
-  // กรองรายชื่อนักศึกษาจากข้อมูล CSV
+  // Dynamic Filter รายชื่อนักศึกษาจาก CSV จริง
   const filteredStudents = allStudentsData.filter(s => {
-    // รองรับชื่อคอลัมน์หลายรูปแบบใน CSV (เช่น discGroup, groupId, studentId, studentName)
-    const stdDisc = s.discGroup || s.groupId || s.group || '';
-    const stdArea = s.areaGroup || s.area || '';
-    const stdName = (s.studentName || s.name || '').toLowerCase();
-    const stdId = (s.studentId || s.id || '').toString();
+    // รองรับชื่อคอลัมน์มาตรฐานทั้งภาษาไทยและอังกฤษใน CSV
+    const stdDisc = (s.discGroup || s.groupId || s.group || '').toString().trim();
+    const stdArea = (s.areaGroup || s.area || '').toString().trim();
+    const stdName = (s.studentName || s.name || s['ชื่อ-นามสกุล'] || '').toLowerCase();
+    const stdId = (s.studentId || s.id || s['รหัสนักศึกษา'] || '').toString();
 
-    const matchDisc = (discGroup === 'all') || (stdDisc.toString() === discGroup);
-    const matchArea = (areaGroup === 'all') || (stdArea.toString() === areaGroup);
+    const matchDisc = (discGroup === 'all') || (stdDisc === discGroup);
+    const matchArea = (areaGroup === 'all') || (stdArea === areaGroup);
     const matchQuery = !searchQuery || stdName.includes(searchQuery) || stdId.includes(searchQuery);
 
     return matchDisc && matchArea && matchQuery;
@@ -461,11 +458,11 @@ function updateGroupInfoCard(discGroup, areaGroup, searchQuery) {
   const rosterGrid = document.getElementById('studentRosterGrid');
   if (filteredStudents.length > 0) {
     rosterGrid.innerHTML = filteredStudents.map(s => {
-      const id = s.studentId || s.id || '';
-      const name = s.studentName || s.name || 'ไม่ระบุชื่อ';
-      const disc = s.discGroup || s.groupId || '-';
+      const id = s.studentId || s.id || s['รหัสนักศึกษา'] || '';
+      const name = s.studentName || s.name || s['ชื่อ-นามสกุล'] || 'ไม่ระบุชื่อ';
+      const disc = s.discGroup || s.groupId || s.group || '-';
       const area = s.areaGroup || s.area || '-';
-      const advisor = s.advisor ? `<br><small style="color:#64748b;">อ.ที่ปรึกษา: ${s.advisor}</small>` : '';
+      const advisor = s.advisor || s['อาจารย์ที่ปรึกษา'] ? `<br><small style="color:#64748b;">อ.ที่ปรึกษา: ${s.advisor || s['อาจารย์ที่ปรึกษา']}</small>` : '';
 
       return `<div class="student-item">
         🆔 <b>${id}</b> - ${name}
@@ -490,7 +487,7 @@ document.getElementById('areaFilter').addEventListener('change', renderSchedule)
 document.getElementById('lecturerFilter').addEventListener('change', renderSchedule);
 document.getElementById('searchInput').addEventListener('input', renderSchedule);
 
-// เริ่มโหลดข้อมูล CSV ทั้งหมด
+// เริ่มโหลดข้อมูล CSV ทั้ง 2 ไฟล์
 loadAllCSVData();
 </script>
 
