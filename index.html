@@ -3,21 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ตารางเรียน RACM303 - ระบบตารางสอนภาควิชา</title>
+  <title>ระบบตารางเรียน & รายชื่อนักศึกษา RACM303</title>
   
-  <!-- เปลี่ยนเป็น Font Prompt อ่านง่าย กึ่งทางการ ตัวใหญ่ชัดเจน -->
+  <!-- Font Prompt อ่านง่าย กึ่งทางการ ตัวใหญ่ชัดเจน -->
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- PapaParse Library สำหรับดึงและแปลงไฟล์ CSV -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   
   <style>
     :root {
-      --primary-navy: #1e3a8a;       /* สีหลัก Navy Blue */
+      --primary-navy: #1e3a8a;      /* สีหลัก Navy Blue */
       --navy-dark: #0f172a;
-      --navy-light: #e0f2fe;
-      --accent-blue: #0284c7;        /* สีเน้นความโดดเด่น */
-      --bg-main: #f8fafc;            /* สีพื้นหลังหน้าเว็บ */
-      --text-main: #0f172a;          /* สีตัวหนังสือหลัก คมชัด */
-      --text-muted: #334155;         /* สีตัวหนังสือรอง */
-      --border-color: #cbd5e1;       /* สีเส้นขอบ */
+      --navy-light: #eff6ff;
+      --accent-blue: #0284c7;       /* สีเน้นความโดดเด่น */
+      --bg-main: #f8fafc;           /* สีพื้นหลังหน้าเว็บ */
+      --text-main: #0f172a;         /* สีตัวหนังสือหลัก คมชัด */
+      --text-muted: #334155;        /* สีตัวหนังสือรอง */
+      --border-color: #cbd5e1;      /* สีเส้นขอบ */
     }
 
     * { 
@@ -31,6 +34,7 @@
       margin: 0; 
       padding: 24px; 
       line-height: 1.6;
+      font-size: 16px;
     }
 
     .container { 
@@ -41,7 +45,7 @@
     /* Header Section */
     header { 
       background: var(--primary-navy); 
-      color: #ffffff;
+      color: #ffffff; 
       padding: 24px; 
       border-radius: 8px; 
       margin-bottom: 24px; 
@@ -57,7 +61,7 @@
 
     .subtitle { 
       color: #e2e8f0; 
-      font-size: 1rem; 
+      font-size: 0.95rem; 
       margin: 0; 
       font-weight: 300;
     }
@@ -68,9 +72,9 @@
       border: 1px solid var(--border-color);
       border-radius: 8px;
       padding: 20px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 16px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
@@ -88,7 +92,7 @@
     }
 
     select, input {
-      padding: 10px 14px;
+      padding: 10px 12px;
       border: 1px solid var(--border-color);
       border-radius: 6px;
       font-size: 0.95rem;
@@ -100,6 +104,66 @@
     select:focus, input:focus { 
       border-color: var(--accent-blue); 
       box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+    }
+
+    /* 📌 ส่วนแสดงข้อมูลกลุ่มย่อย & รายชื่อนักศึกษา */
+    .group-info-card {
+      background: #ffffff;
+      border: 2px solid var(--accent-blue);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 4px rgba(2, 132, 199, 0.08);
+      display: none; /* ซ่อนไว้ก่อน จะแสดงเมื่อเลือกกลุ่มย่อย */
+    }
+
+    .group-info-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+
+    .group-info-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--primary-navy);
+    }
+
+    .btn-toggle-roster {
+      background: var(--navy-light);
+      color: var(--accent-blue);
+      border: 1px solid var(--accent-blue);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .btn-toggle-roster:hover {
+      background: var(--accent-blue);
+      color: #ffffff;
+    }
+
+    .student-roster-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 8px 16px;
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    .student-item {
+      font-size: 0.92rem;
+      color: var(--text-main);
+      background: #f8fafc;
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid #e2e8f0;
     }
 
     /* Summary Bar */
@@ -114,28 +178,26 @@
       font-weight: 500;
     }
 
-    /* Schedule Timeline */
+    /* Timeline Structure */
     .timeline { 
       display: flex; 
       flex-direction: column; 
       gap: 12px; 
     }
 
-    /* การแบ่งสัปดาห์ให้เห็นชัดเจน */
+    /* แถบสัปดาห์ (สีน้ำเงินเข้ม ตัวใหญ่) */
     .week-header {
       background: var(--primary-navy);
       color: #ffffff;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       font-weight: 700;
       padding: 12px 18px;
       border-radius: 6px;
       margin-top: 24px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
 
+    /* แถบแยกรายวัน (สีเทาฟ้า มีขอบสีฟ้าเน้นด้านซ้าย) */
     .day-header {
       font-size: 1.05rem;
       font-weight: 600;
@@ -150,7 +212,7 @@
       border-radius: 4px;
     }
 
-    /* Cards */
+    /* Card Item */
     .card {
       background: #ffffff;
       border: 1px solid var(--border-color);
@@ -185,7 +247,6 @@
     .lecturer-name { 
       color: var(--text-muted); 
       font-size: 0.95rem; 
-      font-weight: 400;
     }
 
     /* Badges / Formats */
@@ -201,8 +262,8 @@
     }
 
     .badge-exam { border-color: #991b1b; color: #991b1b; background: #fef2f2; }
+    .badge-group { border-color: #0284c7; color: #0284c7; background: #e0f2fe; }
     .badge-online { border-color: #c2410c; color: #c2410c; background: #fff7ed; }
-    .badge-hybrid { border-color: #6b21a8; color: #6b21a8; background: #faf5ff; }
     .badge-field { border-color: #15803d; color: #15803d; background: #f0fdf4; }
 
     @media (max-width: 768px) {
@@ -216,38 +277,76 @@
 
 <div class="container">
   <header>
-    <h1>ตารางกิจกรรมการเรียนการสอน วิชา RACM303</h1>
-    <p class="subtitle">Community Medicine & Health Systems Science — ระบบตารางสอนและตารางปฏิบัติงาน</p>
+    <h1>ระบบตารางกิจกรรมการเรียนการสอน (มัลติชั้นปี & กลุ่มย่อย)</h1>
+    <p class="subtitle">ดึงข้อมูลจากไฟล์ CSV อัตโนมัติ — ซิงก์ตรงจาก Google Sheets</p>
   </header>
 
-  <!-- Filter Controls -->
+  <!-- แถบควบคุมการกรอง -->
   <div class="filter-panel">
     <div class="filter-group">
-      <label for="searchInput">ค้นหาหัวข้อ / กิจกรรม / อาจารย์</label>
-      <input type="text" id="searchInput" placeholder="พิมพ์คำค้นหา เช่น HS, EP, ชื่ออาจารย์...">
+      <label for="yearFilter">1. เลือกชั้นปี</label>
+      <select id="yearFilter">
+        <option value="ปี 3">ปี 3</option>
+        <option value="ปี 4">ปี 4</option>
+      </select>
     </div>
+
     <div class="filter-group">
-      <label for="lecturerFilter">กรองตามรายชื่ออาจารย์</label>
+      <label for="groupFilter">2. กลุ่มย่อยของฉัน</label>
+      <select id="groupFilter">
+        <option value="all">-- แสดงทุกกลุ่ม (ภาพรวม) --</option>
+        <option value="1">กลุ่ม 1</option>
+        <option value="2">กลุ่ม 2</option>
+        <option value="3">กลุ่ม 3</option>
+        <option value="4">กลุ่ม 4</option>
+        <option value="5">กลุ่ม 5</option>
+        <option value="6">กลุ่ม 6</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="lecturerFilter">3. กรองตามอาจารย์</label>
       <select id="lecturerFilter">
         <option value="">-- อาจารย์ทั้งหมด --</option>
+        <option value="สัมฤทธิ์">ผศ. นพ.สัมฤทธิ์ ศรีธำรงสวัสดิ์</option>
+        <option value="ภูษิต">อ. นพ.ภูษิต ประคองสาย</option>
+        <option value="เริงฤดี">รศ. พญ.เริงฤดี ปธานวนิช</option>
+        <option value="ฉัตรชัย">อ. นพ.ฉัตรชัย อิ่มอารมย์</option>
+        <option value="วริษา">อ. พญ.วริษา สุนทรวินิต</option>
+        <option value="ณัฐวุฒิ">อ. นพ.ณัฐวุฒิ เอี่ยงธนรัตน์</option>
+        <option value="ภรัณยู">นพ. ภรัณยู โอสถธนากร</option>
+        <option value="พีรสิชฌ์">นพ. พีรสิชฌ์ สิทธิรัตน์</option>
+        <option value="จักรกฤษณ์">อ. นพ.จักรกฤษณ์ เอื้อสุนทรวัฒนา</option>
+        <option value="สวนีย์">อ. พญ.สวนีย์ ศรีเจริญธรรม</option>
+        <option value="ปวินท์">อ. ปวินท์</option>
+        <option value="วิชัย">ศ. วิชัย</option>
+        <option value="ฉัฐญาณ์">ผศ. พญ.ฉัฐญาณ์ วงศ์รัฐนันท์</option>
+        <option value="วิชช์">ผศ. นพ.วิชช์ เกษมทรัพย์</option>
       </select>
     </div>
+
     <div class="filter-group">
-      <label for="weekFilter">กรองตามสัปดาห์</label>
-      <select id="weekFilter">
-        <option value="">-- ทุกสัปดาห์ --</option>
-        <option value="สัปดาห์ที่ 1">สัปดาห์ที่ 1</option>
-        <option value="สัปดาห์ที่ 2">สัปดาห์ที่ 2</option>
-        <option value="สัปดาห์ที่ 3">สัปดาห์ที่ 3</option>
-        <option value="สัปดาห์ที่ 4">สัปดาห์ที่ 4 (ภาคสนาม)</option>
-        <option value="สัปดาห์ที่ 5">สัปดาห์ที่ 5</option>
-        <option value="สัปดาห์ที่ 6">สัปดาห์ที่ 6</option>
-      </select>
+      <label for="searchInput">4. ค้นหาคำ/วิชา</label>
+      <input type="text" id="searchInput" placeholder="พิมพ์ชื่อวิชา หัวข้อ หรือชื่ออาจารย์...">
+    </div>
+  </div>
+
+  <!-- 📍 กล่องแสดงสรุปข้อมูลกลุ่มย่อยและรายชื่อเพื่อนร่วมกลุ่ม -->
+  <div class="group-info-card" id="groupInfoCard">
+    <div class="group-info-header">
+      <div class="group-info-title" id="groupTitle">สรุปข้อมูลกลุ่มย่อย</div>
+      <button class="btn-toggle-roster" onclick="toggleRosterView()">👥 ดูรายชื่อสมาชิกในกลุ่ม (<span id="studentCount">0</span> คน)</button>
+    </div>
+    <div id="groupDetails">
+      <!-- ข้อมูลอาจารย์ที่ปรึกษาประจำกลุ่มจะแสดงตรงนี้ -->
+    </div>
+    <div class="student-roster-grid" id="studentRosterGrid" style="display: none;">
+      <!-- รายชื่อนักศึกษาจะถูกดึงมาแสดงตรงนี้ -->
     </div>
   </div>
 
   <div class="summary">
-    <span id="resultCount">กำลังโหลดข้อมูล...</span>
+    <span id="resultCount">กำลังโหลดข้อมูลจาก CSV...</span>
     <span>ระบบค้นหาและกรองข้อมูลทางการศึกษา</span>
   </div>
 
@@ -255,145 +354,82 @@
 </div>
 
 <script>
-// รายชื่ออาจารย์ทั้งหมดในรายวิชา
-const lecturerList = [
-  "ณัฐวุฒิ", "สัมฤทธิ์", "ภูษิต", "เริงฤดี", "ฉัตรชัย", "วริษา", 
-  "จักรกฤษณ์", "สวนีย์", "ปวินท์", "วิชัย", "ฉัฐญาณ์", "วิชช์", "ภรัณยู", "พีรสิชฌ์"
+// *** ลิงก์ CSV Publish to Web จาก Google Sheets ของคุณ ***
+const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTVCp6_8XOpTvWsEDQIKVjl-0VNK5gwlXXbIbtrrOlb80CYjon9cTJf5-W-al76r7bLG5gP21NInkz7/pub?gid=1642042382&single=true&output=csv'; 
+
+let allScheduleData = [];
+
+// ตัวอย่างสถิตินักศึกษาสำหรับการแมปหน้าเว็บ (สามารถดึงจาก CSV Sheet 2 ได้)
+const sampleStudents = [
+  { id: "6709001", name: "นักศึกษาแพทย์ สมมติ_1", group: "1" },
+  { id: "6709002", name: "นักศึกษาแพทย์ สมมติ_2", group: "2" },
+  { id: "6709003", name: "นักศึกษาแพทย์ สมมติ_3", group: "3" },
+  { id: "6709004", name: "นักศึกษาแพทย์ สมมติ_4", group: "4" },
+  { id: "6709005", name: "นักศึกษาแพทย์ สมมติ_5", group: "5" },
+  { id: "6709006", name: "นักศึกษาแพทย์ สมมติ_6", group: "6" }
 ];
 
-// ข้อความรวมอาจารย์ทุกคนสำหรับกิจกรรมกลุ่มย่อย/ภาคสนาม
-const allLecturersText = "อ.ที่ปรึกษาประจำกลุ่ม (อ.ณัฐวุฒิ, อ.สัมฤทธิ์, อ.ภูษิต, อ.เริงฤดี, อ.ฉัตรชัย, อ.วริษา, อ.จักรกฤษณ์, อ.สวนีย์, อ.ปวินท์, อ.วิชัย, อ.ฉัฐญาณ์, อ.วิชช์, อ.ภรัณยู, อ.พีรสิชฌ์)";
-
-// รายชื่ออาจารย์ฝั่งระบาดวิทยาสำหรับคลาส Exercise/Q&A
-const epiLecturersText = "อาจารย์กลุ่มวิชาระบาดวิทยา (อ.จักรกฤษณ์, อ.สวนีย์, อ.ปวินท์, ศ.วิชัย, ผศ.ฉัฐญาณ์)";
-
-const scheduleData = [
-  // สัปดาห์ที่ 1
-  { week: "สัปดาห์ที่ 1", date: "วันพุธที่ 25 พฤศจิกายน 2569", time: "09.00 – 09.30 น.", topic: "Orientation to Community Medicine and Health Systems Science", lecturer: "อ. นพ.ณัฐวุฒิ เอี่ยงธนรัตน์", format: "Onsite" },
-  { week: "สัปดาห์ที่ 1", date: "วันพุธที่ 25 พฤศจิกายน 2569", time: "09.30 - 12.00 น.", topic: "Systems & Systems Thinking", lecturer: "อ. นพ.ณัฐวุฒิ เอี่ยงธนรัตน์", format: "Onsite" },
-  { week: "สัปดาห์ที่ 1", date: "วันพุธที่ 25 พฤศจิกายน 2569", time: "13.00 – 16.00 น.", topic: "Bedside to Systems-Based Practice: Global/Planetary Health & HPSR", lecturer: "อ. นพ.ณัฐวุฒิ เอี่ยงธนรัตน์", format: "Onsite" },
-  { week: "สัปดาห์ที่ 1", date: "วันพฤหัสบดีที่ 26 พฤศจิกายน 2569", time: "09.00 – 10.00 น.", topic: "HS1: Health & Determinants of health", lecturer: "อ. พญ.วริษา สุนทรวินิต", format: "Onsite" },
-  
-  { week: "สัปดาห์ที่ 1", date: "วันพฤหัสบดีที่ 26 พฤศจิกายน 2569", time: "10.10 - 12.00 น.", topic: "Discussion: Health & Determinants of health (กลุ่ม 1)", lecturer: "ผศ. นพ.สัมฤทธิ์ ศรีธำรงสวัสดิ์ / นพ.พีรสิชฌ์ สิทธิรัตน์", format: "Onsite", isGroup: true },
-  { week: "สัปดาห์ที่ 1", date: "วันพฤหัสบดีที่ 26 พฤศจิกายน 2569", time: "10.10 - 12.00 น.", topic: "Discussion: Health & Determinants of health (กลุ่ม 2)", lecturer: "อ. นพ.ภูษิต ประคองสาย", format: "Onsite", isGroup: true },
-  { week: "สัปดาห์ที่ 1", date: "วันพฤหัสบดีที่ 26 พฤศจิกายน 2569", time: "10.10 - 12.00 น.", topic: "Discussion: Health & Determinants of health (กลุ่ม 3)", lecturer: "รศ. พญ.เริงฤดี ปธานวนิช", format: "Onsite", isGroup: true },
-  { week: "สัปดาห์ที่ 1", date: "วันพฤหัสบดีที่ 26 พฤศจิกายน 2569", time: "10.10 - 12.00 น.", topic: "Discussion: Health & Determinants of health (กลุ่ม 4)", lecturer: "อ. นพ.ฉัตรชัย อิ่มอารมย์", format: "Onsite", isGroup: true },
-  { week: "สัปดาห์ที่ 1", date: "วันพฤหัสบดีที่ 26 พฤศจิกายน 2569", time: "10.10 - 12.00 น.", topic: "Discussion: Health & Determinants of health (กลุ่ม 5)", lecturer: "อ. พญ.วริษา สุนทรวินิต", format: "Onsite", isGroup: true },
-  { week: "สัปดาห์ที่ 1", date: "วันพฤหัสบดีที่ 26 พฤศจิกายน 2569", time: "10.10 - 12.00 น.", topic: "Discussion: Health & Determinants of health (กลุ่ม 6)", lecturer: "อ. นพ.ณัฐวุฒิ เอี่ยงธนรัตน์ / นพ.ภรัณยู โอสถธนากร", format: "Onsite", isGroup: true },
-  
-  { week: "สัปดาห์ที่ 1", date: "วันพฤหัสบดีที่ 26 พฤศจิกายน 2569", time: "13.00 – 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 1: การทำความรู้จักกันและชี้แจงภาระกิจก่อนและระหว่างออกภาคสนาม", lecturer: allLecturersText, format: "Onsite", isGroup: true },
-  { week: "สัปดาห์ที่ 1", date: "วันศุกร์ที่ 27 พฤศจิกายน 2569", time: "09.00 – 11.00 น.", topic: "EP1: Introduction / EP2-3: Diagnostic Test & Errors in epidemiology", lecturer: "อ. นพ.จักรกฤษณ์ เอื้อสุนทรวัฒนา", format: "Hybrid" },
-  { week: "สัปดาห์ที่ 1", date: "วันศุกร์ที่ 27 พฤศจิกายน 2569", time: "11.00 – 12.00 น.", topic: "EXERCISE 2 & 3: Diagnostic Test & Errors", lecturer: epiLecturersText, format: "Online" },
-  { week: "สัปดาห์ที่ 1", date: "วันศุกร์ที่ 27 พฤศจิกายน 2569", time: "13.00 - 16.30 น.", topic: "Exercise Day 1", lecturer: epiLecturersText, format: "Online" },
-
-  // สัปดาห์ที่ 2
-  { week: "สัปดาห์ที่ 2", date: "วันจันทร์ที่ 30 พฤศจิกายน 2569", time: "09.00 - 10.00 น.", topic: "HS2: Health services I", lecturer: "อ. นพ.ณัฐวุฒิ เอี่ยงธนรัตน์", format: "Onsite" },
-  { week: "สัปดาห์ที่ 2", date: "วันจันทร์ที่ 30 พฤศจิกายน 2569", time: "10.10 - 12.00 น.", topic: "Discussion: Health services I (Small Groups 1-6)", lecturer: "อ.ภูษิต, รศ.เริงฤดี, อ.ฉัตรชัย, อ.วริษา, อ.ณัฐวุฒิ/นพ.ภรัณยู, ผศ.สัมฤทธิ์/นพ.พีรสิชฌ์", format: "Onsite", isGroup: true },
-  { week: "สัปดาห์ที่ 2", date: "วันจันทร์ที่ 30 พฤศจิกายน 2569", time: "13.00 - 14.00 น.", topic: "HS3: Health services II", lecturer: "อ. นพ.ภูษิต ประคองสาย", format: "Onsite" },
-  { week: "สัปดาห์ที่ 2", date: "วันจันทร์ที่ 30 พฤศจิกายน 2569", time: "14.10 - 16.30 น.", topic: "Discussion: Health services II (Small Groups 1-6)", lecturer: "รศ.เริงฤดี, อ.ฉัตรชัย, อ.วริษา, อ.ณัฐวุฒิ/นพ.ภรัณยู, ผศ.สัมฤทธิ์/นพ.พีรสิชฌ์, อ.ภูษิต", format: "Onsite", isGroup: true },
-
-  { week: "สัปดาห์ที่ 2", date: "วันอังคารที่ 1 ธันวาคม 2569", time: "09.00 - 10.00 น.", topic: "HS4: Health promotion & COM-B", lecturer: "ผศ. นพ.วิชช์ เกษมทรัพย์", format: "Onsite" },
-  { week: "สัปดาห์ที่ 2", date: "วันอังคารที่ 1 ธันวาคม 2569", time: "10.10 - 12.00 น.", topic: "Discussion: Health promotion & COM-B (Small Groups 1-6)", lecturer: "อ.ฉัตรชัย, อ.วริษา, อ.ณัฐวุฒิ/นพ.ภรัณยู, ผศ.สัมฤทธิ์/นพ.พีรสิชฌ์, อ.ภูษิต, รศ.เริงฤดี", format: "Onsite", isGroup: true },
-  { week: "สัปดาห์ที่ 2", date: "วันอังคารที่ 1 ธันวาคม 2569", time: "13.00 - 14.00 น.", topic: "HS5: Primary health care & Primary care", lecturer: "อ. นพ.ฉัตรชัย อิ่มอารมย์", format: "Onsite" },
-  { week: "สัปดาห์ที่ 2", date: "วันอังคารที่ 1 ธันวาคม 2569", time: "14.10 - 16.30 น.", topic: "Discussion: Primary health care & Primary care (Small Groups 1-6)", lecturer: "อ.วริษา, อ.ณัฐวุฒิ/นพ.ภรัณยู, ผศ.สัมฤทธิ์/นพ.พีรสิชฌ์, อ.ภูษิต, รศ.เริงฤดี, อ.ฉัตรชัย", format: "Onsite", isGroup: true },
-
-  { week: "สัปดาห์ที่ 2", date: "วันพุธที่ 2 ธันวาคม 2569", time: "09.00 – 12.00 น.", topic: "EP4: Study designs & EP5: Disease surveillance", lecturer: "อ. พญ.สวนีย์ ศรีเจริญธรรม", format: "Hybrid" },
-  { week: "สัปดาห์ที่ 2", date: "วันพุธที่ 2 ธันวาคม 2569", time: "13.00 - 16.00 น.", topic: "EXERCISE 4 & 5", lecturer: epiLecturersText, format: "Online" },
-  { week: "สัปดาห์ที่ 2", date: "วันพุธที่ 2 ธันวาคม 2569", time: "16.00 - 16.30 น.", topic: "Q&A Exercise Day 1, 2", lecturer: "อ.จักรกฤษณ์, อ.สวนีย์, อ.ปวินท์, ศ.วิชัย, ผศ.ฉัฐญาณ์", format: "Online" },
-
-  { week: "สัปดาห์ที่ 2", date: "วันพฤหัสบดีที่ 3 ธันวาคม 2569", time: "09.00 – 12.00 น.", topic: "EP6: Burden of disease / EP7: Health survey / EP8: Experimental", lecturer: "อ.ปวินท์, ศ.วิชัย, ผศ.ฉัฐญาณ์", format: "Hybrid" },
-  { week: "สัปดาห์ที่ 2", date: "วันพฤหัสบดีที่ 3 ธันวาคม 2569", time: "13.00 - 14.00 น.", topic: "EP5: EBM (Evidence-Based Medicine)", lecturer: "ผศ. พญ.ฉัฐญาณ์ วงศ์รัฐนันท์", format: "Hybrid" },
-  { week: "สัปดาห์ที่ 2", date: "วันพฤหัสบดีที่ 3 ธันวาคม 2569", time: "14.00 - 16.00 น.", topic: "EXERCISE 6 & 7", lecturer: epiLecturersText, format: "Online" },
-  { week: "สัปดาห์ที่ 2", date: "วันพฤหัสบดีที่ 3 ธันวาคม 2569", time: "16.00 – 16.30 น.", topic: "Q&A Exercise Day 3", lecturer: epiLecturersText, format: "Online" },
-
-  { week: "สัปดาห์ที่ 2", date: "วันศุกร์ที่ 4 ธันวาคม 2569", time: "09.00 - 10.00 น.", topic: "HS6: Health insurance & payment", lecturer: "ผศ. นพ.สัมฤทธิ์ / นพ.พีรสิชฌ์", format: "Onsite" },
-  { week: "สัปดาห์ที่ 2", date: "วันศุกร์ที่ 4 ธันวาคม 2569", time: "10.10 - 12.00 น.", topic: "Discussion: Health insurance & payment (Small Groups 1-6)", lecturer: "อ.ณัฐวุฒิ, ผศ.สัมฤทธิ์, อ.ภูษิต, รศ.เริงฤดี, อ.ฉัตรชัย, อ.วริษา", format: "Onsite", isGroup: true },
-  { week: "สัปดาห์ที่ 2", date: "วันศุกร์ที่ 4 ธันวาคม 2569", time: "13.00 – 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 2: งานกลุ่มก่อนและระหว่างออกภาคสนาม", lecturer: allLecturersText, format: "Onsite", isGroup: true },
-
-  // สัปดาห์ที่ 3
-  { week: "สัปดาห์ที่ 3", date: "วันอังคารที่ 8 ธันวาคม 2569", time: "09.00 - 12.00 น.", topic: "สอบภาคทฤษฎีระบาด", lecturer: epiLecturersText + " / จนท.ภาควิชาฯ", format: "Exam" },
-  { week: "สัปดาห์ที่ 3", date: "วันอังคารที่ 8 ธันวาคม 2569", time: "13.00 – 14.30 น.", topic: "โปรแกรมวิเคราะห์ข้อมูล SPSS", lecturer: "อ. พญ.สวนีย์ ศรีเจริญธรรม", format: "Onsite" },
-  { week: "สัปดาห์ที่ 3", date: "วันอังคารที่ 8 ธันวาคม 2569", time: "14.30 – 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 3", lecturer: allLecturersText, format: "Onsite", isGroup: true },
-  { week: "สัปดาห์ที่ 3", date: "วันพุธที่ 9 ธันวาคม 2569", time: "09.00 - 12.00 น.", topic: "Community Approach / District health Systems – Learning How to Learn", lecturer: "วิทยากร", format: "Onsite" },
-  { week: "สัปดาห์ที่ 3", date: "วันพุธที่ 9 ธันวาคม 2569", time: "14.30 – 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 4", lecturer: allLecturersText, format: "Onsite", isGroup: true },
-  { week: "สัปดาห์ที่ 3", date: "วันศุกร์ที่ 11 ธันวาคม 2569", time: "09.00 – 12.00 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 4 (ต่อ): การเตรียมการออกพื้นที่ ครั้งที่ 1", lecturer: allLecturersText, format: "Onsite", isGroup: true },
-  { week: "สัปดาห์ที่ 3", date: "วันศุกร์ที่ 11 ธันวาคม 2569", time: "13.00 – 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 5: ภาคปฏิบัติ 7 เครื่องมือ + เตรียมออกพื้นที่", lecturer: allLecturersText, format: "Onsite", isGroup: true },
-
-  // สัปดาห์ที่ 4 (เพิ่มสัปดาห์ภาคสนามตามโจทย์)
-  { week: "สัปดาห์ที่ 4", date: "สัปดาห์การออกปฏิบัติภาคสนาม", time: "ตลอดสัปดาห์", topic: "การเรียนภาคสนาม (Community Field Practice)", lecturer: allLecturersText, format: "Field" },
-
-  // สัปดาห์ที่ 5
-  { week: "สัปดาห์ที่ 5", date: "วันอังคารที่ 22 ธันวาคม 2569", time: "09.00 - 12.00 น.", topic: "สอบภาคทฤษฎีระบบ", lecturer: "อ. นพ.ณัฐวุฒิ เอี่ยงธนรัตน์ / ผศ. นพ.สัมฤทธิ์ ศรีธำรงสวัสดิ์", format: "Exam" },
-  { week: "สัปดาห์ที่ 5", date: "วันอังคารที่ 22 ธันวาคม 2569", time: "13.00 – 16.30 น.", topic: "Workshop: Systems Thinking in Actions – CLD / System Archetypes", lecturer: "อ. นพ.ณัฐวุฒิ เอี่ยงธนรัตน์", format: "Onsite" },
-  { week: "สัปดาห์ที่ 5", date: "วันพุธที่ 23 ธันวาคม 2569", time: "09.00 - 12.00 น.", topic: "Interconnected Six Building Blocks / Health Promotion in Action", lecturer: "วิทยากร", format: "Onsite" },
-  { week: "สัปดาห์ที่ 5", date: "วันพุธที่ 23 ธันวาคม 2569", time: "13.00 - 16.30 น.", topic: "Panel Discussion: Young-Gen Systems-based Practitioner", lecturer: "วิทยากร", format: "Onsite" },
-  { week: "สัปดาห์ที่ 5", date: "วันพฤหัสบดีที่ 24 ธันวาคม 2569", time: "09.00 - 12.00 น.", topic: "Consultation & Workshop: นโยบายและ Policy Advocacy", lecturer: "วิทยากร", format: "Onsite" },
-  { week: "สัปดาห์ที่ 5", date: "วันพฤหัสบดีที่ 24 ธันวาคม 2569", time: "13.00 - 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 6", lecturer: allLecturersText, format: "Onsite", isGroup: true },
-  { week: "สัปดาห์ที่ 5", date: "วันศุกร์ที่ 25 ธันวาคม 2569", time: "09.00 - 12.00 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 7", lecturer: allLecturersText, format: "Onsite", isGroup: true },
-  { week: "สัปดาห์ที่ 5", date: "วันศุกร์ที่ 25 ธันวาคม 2569", time: "13.00 - 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 8", lecturer: allLecturersText, format: "Onsite", isGroup: true },
-
-  // สัปดาห์ที่ 6
-  { week: "สัปดาห์ที่ 6", date: "วันจันทร์ที่ 28 ธันวาคม 2569", time: "09.00 – 12.00 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 9", lecturer: allLecturersText, format: "Onsite", isGroup: true },
-  { week: "สัปดาห์ที่ 6", date: "วันจันทร์ที่ 28 ธันวาคม 2569", time: "13.00 - 16.30 น.", topic: "กิจกรรมกลุ่มย่อย ครั้งที่ 10", lecturer: allLecturersText, format: "Onsite", isGroup: true },
-  { week: "สัปดาห์ที่ 6", date: "วันอังคารที่ 29 ธันวาคม 2569", time: "08.30 - 15.30 น.", topic: "นำเสนอการเรียนรู้ภาคสนาม ระบบบริการสุขภาพ", lecturer: allLecturersText + " / นศพ.", format: "Onsite" },
-  { week: "สัปดาห์ที่ 6", date: "วันอังคารที่ 29 ธันวาคม 2569", time: "15.30 - 17.30 น.", topic: "เตรียมการนำเสนอระบาดวิทยา", lecturer: allLecturersText, format: "Onsite" },
-  { week: "สัปดาห์ที่ 6", date: "วันพุธที่ 30 ธันวาคม 2569", time: "08.30 - 13.00 น.", topic: "นำเสนอการเรียนรู้ภาคสนาม ระบาดวิทยา", lecturer: allLecturersText + " / นศพ.", format: "Onsite" },
-  { week: "สัปดาห์ที่ 6", date: "วันพุธที่ 30 ธันวาคม 2569", time: "13.00 - 16.30 น.", topic: "Self-Directed Learning (SDL)", lecturer: "-", format: "Online" }
-];
-
-// ดึงรายชื่ออาจารย์เข้า Dropdown
-const lecturerSelect = document.getElementById("lecturerFilter");
-lecturerList.sort().forEach(name => {
-  const opt = document.createElement("option");
-  opt.value = name;
-  opt.textContent = `อ. ${name}`;
-  lecturerSelect.appendChild(opt);
-});
-
-const container = document.getElementById("scheduleContainer");
-const searchInput = document.getElementById("searchInput");
-const weekSelect = document.getElementById("weekFilter");
-const resultCount = document.getElementById("resultCount");
-
-function getBadge(format, isGroup) {
-  if (format === "Exam") return '<span class="badge badge-exam">[ สอบ ]</span>';
-  if (format === "Online") return '<span class="badge badge-online">[ Online ]</span>';
-  if (format === "Hybrid") return '<span class="badge badge-hybrid">[ Hybrid ]</span>';
-  if (format === "Field") return '<span class="badge badge-field">[ ออกภาคสนาม ]</span>';
-  if (isGroup) return '<span class="badge">[ กลุ่มย่อย ]</span>';
-  return '<span class="badge">[ Onsite ]</span>';
+// ดึงข้อมูล CSV ผ่าน PapaParse
+function loadCSVData() {
+  Papa.parse(csvUrl, {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function(results) {
+      allScheduleData = results.data;
+      renderSchedule(); // เรนเดอร์หน้าเว็บเมื่อโหลดข้อมูลเสร็จ
+    },
+    error: function(err) {
+      document.getElementById('resultCount').textContent = 'เกิดข้อผิดพลาดในการโหลดข้อมูล CSV';
+    }
+  });
 }
 
 function renderSchedule() {
-  const query = searchInput.value.toLowerCase().trim();
-  const selectedLecturer = lecturerSelect.value;
-  const selectedWeek = weekSelect.value;
+  const selectedYear = document.getElementById('yearFilter').value;
+  const selectedGroup = document.getElementById('groupFilter').value;
+  const selectedLecturer = document.getElementById('lecturerFilter').value;
+  const query = document.getElementById('searchInput').value.toLowerCase().trim();
 
+  // อัปเดตกล่องแสดงรายชื่อกลุ่มย่อย
+  updateGroupInfoCard(selectedGroup);
+
+  const container = document.getElementById('scheduleContainer');
   container.innerHTML = "";
+  let count = 0;
   let lastWeek = "";
   let lastDate = "";
-  let count = 0;
 
-  scheduleData.forEach(item => {
-    const matchSearch = item.topic.toLowerCase().includes(query) || 
-                        item.lecturer.toLowerCase().includes(query);
-    const matchLecturer = !selectedLecturer || item.lecturer.includes(selectedLecturer);
-    const matchWeek = !selectedWeek || item.week === selectedWeek;
+  allScheduleData.forEach(item => {
+    // 1. กรองตามชั้นปี
+    const matchYear = !item.year || item.year === selectedYear;
+    
+    // 2. กรองตามกลุ่มนักศึกษา
+    const matchGroup = (selectedGroup === 'all') || (item.groupId === 'all' || item.groupId === selectedGroup);
 
-    if (matchSearch && matchLecturer && matchWeek) {
+    // 3. กรองตามอาจารย์
+    const matchLecturer = !selectedLecturer || (item.lecturer && item.lecturer.includes(selectedLecturer));
+
+    // 4. กรองตามคำค้นหา
+    const matchSearch = !query || 
+                        (item.topic && item.topic.toLowerCase().includes(query)) ||
+                        (item.lecturer && item.lecturer.toLowerCase().includes(query));
+
+    if (matchYear && matchGroup && matchLecturer && matchSearch) {
       count++;
 
-      // สร้าง Header ตัวใหญ่แยกสัปดาห์
+      // 📌 1. เช็กเปลี่ยนสัปดาห์ -> ขึ้นแถบสัปดาห์สีน้ำเงินเข้ม
       if (item.week !== lastWeek) {
         lastWeek = item.week;
+        lastDate = ""; // รีเซ็ตวันเมื่อเปลี่ยนสัปดาห์ใหม่
         const wHeader = document.createElement("div");
         wHeader.className = "week-header";
-        wHeader.innerHTML = `📌 ${item.week}`;
+        wHeader.textContent = `📌 ${item.week}`;
         container.appendChild(wHeader);
       }
 
-      // Header แยกวัน
-      if (item.date !== lastDate) {
+      // 📅 2. เช็กเปลี่ยนวัน -> ขึ้นแถบวัน (Day Header) แยกแต่ละวัน
+      if (item.date && item.date !== lastDate) {
         lastDate = item.date;
         const dHeader = document.createElement("div");
         dHeader.className = "day-header";
@@ -401,28 +437,70 @@ function renderSchedule() {
         container.appendChild(dHeader);
       }
 
+      // 💳 3. สร้างการ์ดแสดงกิจกรรม
       const card = document.createElement("div");
       card.className = "card";
+      
+      let badgeHtml = `<span class="badge">[ ${item.format || 'Onsite'} ]</span>`;
+      if (item.groupId && item.groupId !== 'all') {
+        badgeHtml = `<span class="badge badge-group">[ กลุ่มย่อย ${item.groupId} ]</span>`;
+      } else if (item.format === 'Exam') {
+        badgeHtml = `<span class="badge badge-exam">[ สอบ ]</span>`;
+      } else if (item.format === 'Online') {
+        badgeHtml = `<span class="badge badge-online">[ Online ]</span>`;
+      } else if (item.format === 'Field') {
+        badgeHtml = `<span class="badge badge-field">[ ออกภาคสนาม ]</span>`;
+      }
+
       card.innerHTML = `
-        <div class="time-col">⏱️ ${item.time}</div>
+        <div class="time-col">⏱️ ${item.time || ''}</div>
         <div class="topic-col">
-          <h3>${item.topic}</h3>
-          <div class="lecturer-name">👤 ผู้สอน: ${item.lecturer}</div>
+          <h3>${item.topic || ''}</h3>
+          <div class="lecturer-name">👤 ผู้สอน: ${item.lecturer || '-'}</div>
         </div>
-        <div>${getBadge(item.format, item.isGroup)}</div>
+        <div>${badgeHtml}</div>
       `;
       container.appendChild(card);
     }
   });
 
-  resultCount.textContent = `แสดงผลทั้งสิ้น ${count} รายการ`;
+  document.getElementById('resultCount').textContent = `แสดงผลทั้งสิ้น ${count} รายการ (${selectedYear})`;
 }
 
-searchInput.addEventListener("input", renderSchedule);
-lecturerSelect.addEventListener("change", renderSchedule);
-weekSelect.addEventListener("change", renderSchedule);
+// 📌 ฟังก์ชันอัปเดตข้อมูลกลุ่มย่อย
+function updateGroupInfoCard(group) {
+  const card = document.getElementById('groupInfoCard');
+  if (group === 'all') {
+    card.style.display = 'none';
+    return;
+  }
 
-renderSchedule();
+  card.style.display = 'block';
+  document.getElementById('groupTitle').textContent = `📌 ข้อมูลสมาชิก & อาจารย์ประจำกลุ่มย่อย ${group}`;
+  
+  const members = sampleStudents.filter(s => s.group === group);
+  document.getElementById('studentCount').textContent = members.length;
+
+  const rosterGrid = document.getElementById('studentRosterGrid');
+  rosterGrid.innerHTML = members.length > 0 
+    ? members.map(s => `<div class="student-item">🆔 ${s.id} - ${s.name}</div>`).join('')
+    : '<div style="font-size:0.9rem; color:#64748b;">ยังไม่มีข้อมูลรายชื่อในกลุ่มนี้</div>';
+}
+
+function toggleRosterView() {
+  const grid = document.getElementById('studentRosterGrid');
+  grid.style.display = (grid.style.display === 'none' || grid.style.display === '') ? 'grid' : 'none';
+}
+
+// Event Listeners สำหรับระบบกรอง
+document.getElementById('yearFilter').addEventListener('change', renderSchedule);
+document.getElementById('groupFilter').addEventListener('change', renderSchedule);
+document.getElementById('lecturerFilter').addEventListener('change', renderSchedule);
+document.getElementById('searchInput').addEventListener('input', renderSchedule);
+
+// เริ่มโหลดข้อมูล CSV เมื่อเปิดหน้าเว็บ
+loadCSVData();
 </script>
+
 </body>
 </html>
