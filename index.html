@@ -5,44 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ระบบตารางเรียน & รายชื่อนักศึกษา RACM303</title>
   
-  <!-- Font Prompt อ่านง่าย กึ่งทางการ ตัวใหญ่ชัดเจน -->
+  <!-- Font Prompt -->
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- PapaParse Library สำหรับดึงและแปลงไฟล์ CSV -->
+  <!-- PapaParse Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   
   <style>
     :root {
-      --primary-navy: #1e3a8a;      /* สีหลัก Navy Blue */
+      --primary-navy: #1e3a8a;
       --navy-dark: #0f172a;
       --navy-light: #eff6ff;
-      --accent-blue: #0284c7;       /* สีเน้นความโดดเด่น */
-      --bg-main: #f8fafc;           /* สีพื้นหลังหน้าเว็บ */
-      --text-main: #0f172a;         /* สีตัวหนังสือหลัก คมชัด */
-      --text-muted: #334155;        /* สีตัวหนังสือรอง */
-      --border-color: #cbd5e1;      /* สีเส้นขอบ */
+      --accent-blue: #0284c7;
+      --bg-main: #f8fafc;
+      --text-main: #0f172a;
+      --text-muted: #334155;
+      --border-color: #cbd5e1;
     }
 
-    * { 
-      box-sizing: border-box; 
-      font-family: 'Prompt', sans-serif; 
-    }
+    * { box-sizing: border-box; font-family: 'Prompt', sans-serif; }
+    body { background-color: var(--bg-main); color: var(--text-main); margin: 0; padding: 24px; line-height: 1.6; font-size: 16px; }
+    .container { max-width: 1100px; margin: 0 auto; }
 
-    body { 
-      background-color: var(--bg-main); 
-      color: var(--text-main); 
-      margin: 0; 
-      padding: 24px; 
-      line-height: 1.6;
-      font-size: 16px;
-    }
-
-    .container { 
-      max-width: 1100px; 
-      margin: 0 auto; 
-    }
-
-    /* Header Section */
     header { 
       background: var(--primary-navy); 
       color: #ffffff; 
@@ -52,21 +36,10 @@
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
-    h1 { 
-      margin: 0 0 8px 0; 
-      font-size: 1.6rem; 
-      font-weight: 600; 
-      color: #ffffff;
-    }
+    h1 { margin: 0 0 8px 0; font-size: 1.6rem; font-weight: 600; color: #ffffff; }
+    .subtitle { color: #e2e8f0; font-size: 0.95rem; margin: 0; font-weight: 300; }
 
-    .subtitle { 
-      color: #e2e8f0; 
-      font-size: 0.95rem; 
-      margin: 0; 
-      font-weight: 300;
-    }
-
-    /* Filter Controls Panel (ปรับ Responsive เป็น 5 ช่องกรอง) */
+    /* Filter Controls Panel */
     .filter-panel {
       background: #ffffff;
       border: 1px solid var(--border-color);
@@ -79,18 +52,8 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
-    .filter-group { 
-      display: flex; 
-      flex-direction: column; 
-      gap: 6px; 
-    }
-
-    label { 
-      font-size: 0.9rem; 
-      font-weight: 600; 
-      color: var(--primary-navy); 
-    }
-
+    .filter-group { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 0.9rem; font-weight: 600; color: var(--primary-navy); }
     select, input {
       padding: 10px 12px;
       border: 1px solid var(--border-color);
@@ -106,7 +69,7 @@
       box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
     }
 
-    /* 📌 ส่วนแสดงข้อมูลกลุ่มย่อย & รายชื่อนักศึกษา */
+    /* กล่องแสดงสรุปข้อมูลกลุ่มย่อย & รายชื่อนักศึกษา */
     .group-info-card {
       background: #ffffff;
       border: 2px solid var(--accent-blue);
@@ -126,11 +89,7 @@
       margin-bottom: 12px;
     }
 
-    .group-info-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--primary-navy);
-    }
+    .group-info-title { font-size: 1.1rem; font-weight: 700; color: var(--primary-navy); }
 
     .btn-toggle-roster {
       background: var(--navy-light);
@@ -143,14 +102,11 @@
       font-size: 0.9rem;
     }
 
-    .btn-toggle-roster:hover {
-      background: var(--accent-blue);
-      color: #ffffff;
-    }
+    .btn-toggle-roster:hover { background: var(--accent-blue); color: #ffffff; }
 
     .student-roster-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
       gap: 8px 16px;
       margin-top: 14px;
       padding-top: 10px;
@@ -158,15 +114,14 @@
     }
 
     .student-item {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       color: var(--text-main);
       background: #f8fafc;
-      padding: 6px 10px;
+      padding: 8px 12px;
       border-radius: 4px;
       border: 1px solid #e2e8f0;
     }
 
-    /* Summary Bar */
     .summary { 
       font-size: 0.95rem; 
       color: var(--text-muted); 
@@ -178,14 +133,8 @@
       font-weight: 500;
     }
 
-    /* Timeline Structure */
-    .timeline { 
-      display: flex; 
-      flex-direction: column; 
-      gap: 12px; 
-    }
+    .timeline { display: flex; flex-direction: column; gap: 12px; }
 
-    /* แถบสัปดาห์ (สีน้ำเงินเข้ม ตัวใหญ่) */
     .week-header {
       background: var(--primary-navy);
       color: #ffffff;
@@ -197,7 +146,6 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.08);
     }
 
-    /* แถบแยกรายวัน (สีเทาฟ้า มีขอบสีฟ้าเน้นด้านซ้าย) */
     .day-header {
       font-size: 1.05rem;
       font-weight: 600;
@@ -212,7 +160,6 @@
       border-radius: 4px;
     }
 
-    /* Card Item */
     .card {
       background: #ffffff;
       border: 1px solid var(--border-color);
@@ -225,42 +172,12 @@
       box-shadow: 0 1px 2px rgba(0,0,0,0.03);
     }
 
-    .card:hover {
-      border-color: var(--accent-blue);
-      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.15);
-    }
+    .card:hover { border-color: var(--accent-blue); box-shadow: 0 2px 6px rgba(2, 132, 199, 0.15); }
+    .time-col { font-weight: 700; font-size: 1rem; color: var(--primary-navy); }
+    .topic-col h3 { margin: 0 0 6px 0; font-size: 1.05rem; font-weight: 600; line-height: 1.4; color: var(--text-main); }
+    .lecturer-name { color: var(--text-muted); font-size: 0.92rem; }
 
-    .time-col { 
-      font-weight: 700; 
-      font-size: 1rem; 
-      color: var(--primary-navy); 
-    }
-
-    .topic-col h3 { 
-      margin: 0 0 6px 0; 
-      font-size: 1.05rem; 
-      font-weight: 600; 
-      line-height: 1.4; 
-      color: var(--text-main);
-    }
-
-    .lecturer-name { 
-      color: var(--text-muted); 
-      font-size: 0.92rem; 
-    }
-
-    /* Badges / Formats */
-    .badge {
-      font-size: 0.85rem;
-      font-weight: 600;
-      padding: 5px 12px;
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      background: #f1f5f9;
-      white-space: nowrap;
-      color: var(--text-main);
-    }
-
+    .badge { font-size: 0.85rem; font-weight: 600; padding: 5px 12px; border-radius: 4px; background: #f1f5f9; border: 1px solid var(--border-color); color: var(--text-main); white-space: nowrap; }
     .badge-exam { border-color: #991b1b; color: #991b1b; background: #fef2f2; }
     .badge-group { border-color: #0284c7; color: #0284c7; background: #e0f2fe; }
     .badge-area { border-color: #15803d; color: #15803d; background: #f0fdf4; }
@@ -278,10 +195,10 @@
 <div class="container">
   <header>
     <h1>ระบบตารางกิจกรรมการเรียนการสอน (มัลติชั้นปี & กลุ่มย่อย)</h1>
-    <p class="subtitle">ดึงข้อมูลจากไฟล์ CSV อัตโนมัติ — ซิงก์ตรงจาก Google Sheets</p>
+    <p class="subtitle">ดึงข้อมูลตารางและรายชื่อนักศึกษาจาก Google Sheets อัตโนมัติ</p>
   </header>
 
-  <!-- แถบควบคุมการกรองข้อมูล (5 ตัวเลือก) -->
+  <!-- Filter Panel -->
   <div class="filter-panel">
     <div class="filter-group">
       <label for="yearFilter">1. เลือกชั้นปี</label>
@@ -304,20 +221,21 @@
       </select>
     </div>
 
-    <!-- 📍 ตัวเลือกกรองกลุ่มพื้นที่ (1 - 11 กลุ่ม) ที่เพิ่มเข้ามาใหม่ -->
     <div class="filter-group">
       <label for="areaFilter">3. กลุ่มพื้นที่ (11 กลุ่ม)</label>
       <select id="areaFilter">
         <option value="all">-- ทุกกลุ่มพื้นที่ --</option>
-        <option value="1">กุฉินารายณ์</option>
-        <option value="2">ด่านซ้าย</option>
-        <option value="3">ตะกั่วป่า</option>
-        <option value="4">ท่าวังผา</option>
-        <option value="5">ท่าสองยาง</option>
-        <option value="6">เพชรบูรณ์ 1</option>
-        <option value="7">เพชรบูรณ์ 2</option>
-        <option value="8">อุบลรัตน์</option>
-        <option value="9">อุ้มผาง</option>
+        <option value="1">กลุ่มพื้นที่ 1</option>
+        <option value="2">กลุ่มพื้นที่ 2</option>
+        <option value="3">กลุ่มพื้นที่ 3</option>
+        <option value="4">กลุ่มพื้นที่ 4</option>
+        <option value="5">กลุ่มพื้นที่ 5</option>
+        <option value="6">กลุ่มพื้นที่ 6</option>
+        <option value="7">กลุ่มพื้นที่ 7</option>
+        <option value="8">กลุ่มพื้นที่ 8</option>
+        <option value="9">กลุ่มพื้นที่ 9</option>
+        <option value="10">กลุ่มพื้นที่ 10</option>
+        <option value="11">กลุ่มพื้นที่ 11</option>
       </select>
     </div>
 
@@ -343,18 +261,18 @@
     </div>
 
     <div class="filter-group">
-      <label for="searchInput">5. ค้นหาคำ/ห้อง/วิชา</label>
-      <input type="text" id="searchInput" placeholder="พิมพ์ชื่อวิชา ห้องเรียน หรืออาจารย์...">
+      <label for="searchInput">5. ค้นหาคำ/ห้อง/ชื่อนักศึกษา</label>
+      <input type="text" id="searchInput" placeholder="พิมพ์ชื่อวิชา ห้อง หรือชื่อนักศึกษา...">
     </div>
   </div>
 
-  <!-- 📍 กล่องแสดงสรุปข้อมูลกลุ่มย่อย -->
+  <!-- กล่องแสดงสรุปข้อมูลกลุ่มย่อย -->
   <div class="group-info-card" id="groupInfoCard">
     <div class="group-info-header">
       <div class="group-info-title" id="groupTitle">สรุปข้อมูลกลุ่ม</div>
       <button class="btn-toggle-roster" onclick="toggleRosterView()">👥 ดูรายชื่อสมาชิกในกลุ่ม (<span id="studentCount">0</span> คน)</button>
     </div>
-    <div id="groupDetails"></div>
+    <div id="groupDetails" style="font-size:0.95rem; color:#475569; margin-bottom:8px;"></div>
     <div class="student-roster-grid" id="studentRosterGrid" style="display: none;"></div>
   </div>
 
@@ -367,33 +285,48 @@
 </div>
 
 <script>
-// *** ลิงก์ CSV Publish to Web จาก Google Sheets ของคุณ ***
-const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTVCp6_8XOpTvWsEDQIKVjl-0VNK5gwlXXbIbtrrOlb80CYjon9cTJf5-W-al76r7bLG5gP21NInkz7/pub?output=csv'; 
+// 1. ลิงก์ CSV ตารางเรียน
+const scheduleCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTVCp6_8XOpTvWsEDQIKVjl-0VNK5gwlXXbIbtrrOlb80CYjon9cTJf5-W-al76r7bLG5gP21NInkz7/pub?gid=1642042382&single=true&output=csv';
+
+// 2. ลิงก์ CSV รายชื่อนักศึกษา (gid=262704458)
+const studentsCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTVCp6_8XOpTvWsEDQIKVjl-0VNK5gwlXXbIbtrrOlb80CYjon9cTJf5-W-al76r7bLG5gP21NInkz7/pub?gid=262704458&single=true&output=csv';
 
 let allScheduleData = [];
+let allStudentsData = [];
 
-// ตัวอย่างสถิตินักศึกษาสำหรับการแมปหน้าเว็บ
-const sampleStudents = [
-  { id: "6709001", name: "นักศึกษาแพทย์ สมมติ_1", discGroup: "1", areaGroup: "1" },
-  { id: "6709002", name: "นักศึกษาแพทย์ สมมติ_2", discGroup: "2", areaGroup: "2" },
-  { id: "6709003", name: "นักศึกษาแพทย์ สมมติ_3", discGroup: "3", areaGroup: "3" },
-  { id: "6709004", name: "นักศึกษาแพทย์ สมมติ_4", discGroup: "4", areaGroup: "4" },
-  { id: "6709005", name: "นักศึกษาแพทย์ สมมติ_5", discGroup: "5", areaGroup: "5" },
-  { id: "6709006", name: "นักศึกษาแพทย์ สมมติ_6", discGroup: "6", areaGroup: "6" }
-];
+// โหลดข้อมูล CSV ทั้ง 2 ไฟล์พร้อมกัน
+function loadAllCSVData() {
+  let loadedCount = 0;
 
-// ดึงข้อมูล CSV ผ่าน PapaParse
-function loadCSVData() {
-  Papa.parse(csvUrl, {
+  // โหลดตารางเรียน
+  Papa.parse(scheduleCsvUrl, {
     download: true,
     header: true,
     skipEmptyLines: true,
     complete: function(results) {
       allScheduleData = results.data;
-      renderSchedule();
+      loadedCount++;
+      if (loadedCount === 2) renderSchedule();
     },
     error: function(err) {
-      document.getElementById('resultCount').textContent = 'เกิดข้อผิดพลาดในการโหลดข้อมูล CSV';
+      document.getElementById('resultCount').textContent = 'เกิดข้อผิดพลาดในการโหลดตารางเรียน';
+    }
+  });
+
+  // โหลดรายชื่อนักศึกษา
+  Papa.parse(studentsCsvUrl, {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function(results) {
+      allStudentsData = results.data;
+      loadedCount++;
+      if (loadedCount === 2) renderSchedule();
+    },
+    error: function(err) {
+      console.warn('โหลดรายชื่อนักศึกษาจาก CSV ไม่สำเร็จ');
+      loadedCount++;
+      if (loadedCount === 2) renderSchedule();
     }
   });
 }
@@ -401,11 +334,12 @@ function loadCSVData() {
 function renderSchedule() {
   const selectedYear = document.getElementById('yearFilter').value;
   const selectedGroup = document.getElementById('groupFilter').value;
-  const selectedAreaGroup = document.getElementById('areaFilter').value; // ค่ากลุ่มพื้นที่ที่เลือก
+  const selectedAreaGroup = document.getElementById('areaFilter').value;
   const selectedLecturer = document.getElementById('lecturerFilter').value;
   const query = document.getElementById('searchInput').value.toLowerCase().trim();
 
-  updateGroupInfoCard(selectedGroup, selectedAreaGroup);
+  // อัปเดตรายชื่อนักศึกษาตามกลุ่มที่เลือก
+  updateGroupInfoCard(selectedGroup, selectedAreaGroup, query);
 
   const container = document.getElementById('scheduleContainer');
   container.innerHTML = "";
@@ -414,21 +348,20 @@ function renderSchedule() {
   let lastDate = "";
 
   allScheduleData.forEach(item => {
-    // 1. กรองตามชั้นปี
     const matchYear = !item.year || item.year === selectedYear;
     
-    // 2. กรองตามกลุ่ม Discussion (groupId / discGroup)
+    // กรองกลุ่ม Discussion
     const matchGroup = (selectedGroup === 'all') || 
                        (item.groupId === 'all' || item.groupId === selectedGroup || item.discGroup === selectedGroup);
 
-    // 3. กรองตามกลุ่มพื้นที่ (areaGroup) - 📍 เพิ่มการกรองส่วนนี้
+    // กรองกลุ่มพื้นที่
     const matchArea = (selectedAreaGroup === 'all') || 
                       (!item.areaGroup || item.areaGroup === 'all' || item.areaGroup === selectedAreaGroup);
 
-    // 4. กรองตามอาจารย์
+    // กรองอาจารย์
     const matchLecturer = !selectedLecturer || (item.lecturer && item.lecturer.includes(selectedLecturer));
 
-    // 5. กรองตามคำค้นหา (ค้นหาชื่อวิชา อาจารย์ หรือห้องเรียน)
+    // กรองคำค้นหา
     const matchSearch = !query || 
                         (item.topic && item.topic.toLowerCase().includes(query)) ||
                         (item.lecturer && item.lecturer.toLowerCase().includes(query)) ||
@@ -437,17 +370,15 @@ function renderSchedule() {
     if (matchYear && matchGroup && matchArea && matchLecturer && matchSearch) {
       count++;
 
-      // 📌 1. เช็กเปลี่ยนสัปดาห์ -> ขึ้นแถบสัปดาห์สีน้ำเงินเข้ม
       if (item.week !== lastWeek) {
         lastWeek = item.week;
-        lastDate = ""; // รีเซ็ตวันเมื่อเปลี่ยนสัปดาห์ใหม่
+        lastDate = "";
         const wHeader = document.createElement("div");
         wHeader.className = "week-header";
         wHeader.textContent = `📌 ${item.week}`;
         container.appendChild(wHeader);
       }
 
-      // 📅 2. เช็กเปลี่ยนวัน -> ขึ้นแถบวัน (Day Header) แยกแต่ละวัน
       if (item.date && item.date !== lastDate) {
         lastDate = item.date;
         const dHeader = document.createElement("div");
@@ -456,7 +387,6 @@ function renderSchedule() {
         container.appendChild(dHeader);
       }
 
-      // 💳 3. สร้างการ์ดแสดงกิจกรรม
       const card = document.createElement("div");
       card.className = "card";
       
@@ -491,32 +421,62 @@ function renderSchedule() {
   document.getElementById('resultCount').textContent = `แสดงผลทั้งสิ้น ${count} รายการ (${selectedYear})`;
 }
 
-// 📌 ฟังก์ชันอัปเดตกล่องสรุปข้อมูลกลุ่มย่อย
-function updateGroupInfoCard(discGroup, areaGroup) {
+// 📌 ฟังก์ชันอัปเดตและกรองรายชื่อนักศึกษาตามกลุ่ม Discussion & กลุ่มพื้นที่
+function updateGroupInfoCard(discGroup, areaGroup, searchQuery) {
   const card = document.getElementById('groupInfoCard');
-  if (discGroup === 'all' && areaGroup === 'all') {
+  
+  // แสดงกล่องเมื่อมีการเลือกกลุ่มย่อย หรือมีคำค้นหานักศึกษา
+  if (discGroup === 'all' && areaGroup === 'all' && !searchQuery) {
     card.style.display = 'none';
     return;
   }
 
   card.style.display = 'block';
-  let titleText = '📌 สรุปข้อมูลกลุ่มที่เลือก: ';
-  if (discGroup !== 'all') titleText += `Discussion กลุ่ม ${discGroup} `;
-  if (areaGroup !== 'all') titleText += `| พื้นที่ กลุ่ม ${areaGroup}`;
-
+  
+  let titleText = '📌 รายชื่อนักศึกษาที่กรองตามเงื่อนไข: ';
+  let detailsText = '';
+  
+  if (discGroup !== 'all') detailsText += `<b>Discussion:</b> กลุ่ม ${discGroup} `;
+  if (areaGroup !== 'all') detailsText += `${detailsText ? '| ' : ''}<b>พื้นที่:</b> กลุ่ม ${areaGroup}`;
+  
   document.getElementById('groupTitle').textContent = titleText;
+  document.getElementById('groupDetails').innerHTML = detailsText;
   
-  const members = sampleStudents.filter(s => 
-    (discGroup === 'all' || s.discGroup === discGroup) && 
-    (areaGroup === 'all' || s.areaGroup === areaGroup)
-  );
-  
-  document.getElementById('studentCount').textContent = members.length;
+  // กรองรายชื่อนักศึกษาจากข้อมูล CSV
+  const filteredStudents = allStudentsData.filter(s => {
+    // รองรับชื่อคอลัมน์หลายรูปแบบใน CSV (เช่น discGroup, groupId, studentId, studentName)
+    const stdDisc = s.discGroup || s.groupId || s.group || '';
+    const stdArea = s.areaGroup || s.area || '';
+    const stdName = (s.studentName || s.name || '').toLowerCase();
+    const stdId = (s.studentId || s.id || '').toString();
+
+    const matchDisc = (discGroup === 'all') || (stdDisc.toString() === discGroup);
+    const matchArea = (areaGroup === 'all') || (stdArea.toString() === areaGroup);
+    const matchQuery = !searchQuery || stdName.includes(searchQuery) || stdId.includes(searchQuery);
+
+    return matchDisc && matchArea && matchQuery;
+  });
+
+  document.getElementById('studentCount').textContent = filteredStudents.length;
 
   const rosterGrid = document.getElementById('studentRosterGrid');
-  rosterGrid.innerHTML = members.length > 0 
-    ? members.map(s => `<div class="student-item">🆔 ${s.id} - ${s.name} (Disc:${s.discGroup}/พื้นที่:${s.areaGroup})</div>`).join('')
-    : '<div style="font-size:0.9rem; color:#64748b;">ยังไม่มีข้อมูลรายชื่อนักศึกษาในเงื่อนไขกลุ่มนี้</div>';
+  if (filteredStudents.length > 0) {
+    rosterGrid.innerHTML = filteredStudents.map(s => {
+      const id = s.studentId || s.id || '';
+      const name = s.studentName || s.name || 'ไม่ระบุชื่อ';
+      const disc = s.discGroup || s.groupId || '-';
+      const area = s.areaGroup || s.area || '-';
+      const advisor = s.advisor ? `<br><small style="color:#64748b;">อ.ที่ปรึกษา: ${s.advisor}</small>` : '';
+
+      return `<div class="student-item">
+        🆔 <b>${id}</b> - ${name}
+        <br><span style="font-size:0.8rem; color:#0284c7;">Disc: กลุ่ม ${disc} | พื้นที่: กลุ่ม ${area}</span>
+        ${advisor}
+      </div>`;
+    }).join('');
+  } else {
+    rosterGrid.innerHTML = '<div style="font-size:0.9rem; color:#64748b; padding:8px;">ไม่พบรายชื่อนักศึกษาตรงตามเงื่อนไขที่เลือก</div>';
+  }
 }
 
 function toggleRosterView() {
@@ -524,15 +484,15 @@ function toggleRosterView() {
   grid.style.display = (grid.style.display === 'none' || grid.style.display === '') ? 'grid' : 'none';
 }
 
-// Event Listeners สำหรับระบบกรอง
+// Event Listeners
 document.getElementById('yearFilter').addEventListener('change', renderSchedule);
 document.getElementById('groupFilter').addEventListener('change', renderSchedule);
 document.getElementById('areaFilter').addEventListener('change', renderSchedule);
 document.getElementById('lecturerFilter').addEventListener('change', renderSchedule);
 document.getElementById('searchInput').addEventListener('input', renderSchedule);
 
-// เริ่มโหลดข้อมูล CSV เมื่อเปิดหน้าเว็บ
-loadCSVData();
+// เริ่มโหลดข้อมูล CSV ทั้งหมด
+loadAllCSVData();
 </script>
 
 </body>
