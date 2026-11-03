@@ -222,20 +222,19 @@
     </div>
 
     <div class="filter-group">
-      <label for="areaFilter">3. กลุ่มพื้นที่ (11 กลุ่ม)</label>
+      <label for="areaFilter">3. กลุ่มพื้นที่ (9 กลุ่ม)</label>
       <select id="areaFilter">
         <option value="all">-- ทุกกลุ่มพื้นที่ --</option>
-        <option value="1">กลุ่มพื้นที่ 1</option>
-        <option value="2">กลุ่มพื้นที่ 2</option>
-        <option value="3">กลุ่มพื้นที่ 3</option>
-        <option value="4">กลุ่มพื้นที่ 4</option>
-        <option value="5">กลุ่มพื้นที่ 5</option>
-        <option value="6">กลุ่มพื้นที่ 6</option>
-        <option value="7">กลุ่มพื้นที่ 7</option>
-        <option value="8">กลุ่มพื้นที่ 8</option>
-        <option value="9">กลุ่มพื้นที่ 9</option>
-        <option value="10">กลุ่มพื้นที่ 10</option>
-        <option value="11">กลุ่มพื้นที่ 11</option>
+        <option value="all">-- ทุกกลุ่มพื้นที่ --</option>
+        <option value="1">กุฉินารายณ์</option>
+        <option value="2">ด่านซ้าย</option>
+        <option value="3">ตะกั่วป่า</option>
+        <option value="4">ท่าวังผา</option>
+        <option value="5">ท่าสองยาง</option>
+        <option value="6">เพชรบูรณ์ 1</option>
+        <option value="7">เพชรบูรณ์ 2</option>
+        <option value="8">อุบลรัตน์</option>
+        <option value="9">อุ้มผาง</option>
       </select>
     </div>
 
@@ -350,18 +349,18 @@ function renderSchedule() {
   allScheduleData.forEach(item => {
     const matchYear = !item.year || item.year === selectedYear;
     
-    // กรองกลุ่ม Discussion
+    // ตามกลุ่ม Discussion
     const matchGroup = (selectedGroup === 'all') || 
                        (item.groupId === 'all' || item.groupId === selectedGroup || item.discGroup === selectedGroup);
 
-    // กรองกลุ่มพื้นที่
+    // ตามกลุ่มพื้นที่
     const matchArea = (selectedAreaGroup === 'all') || 
                       (!item.areaGroup || item.areaGroup === 'all' || item.areaGroup === selectedAreaGroup);
 
-    // กรองอาจารย์
+    // อาจารย์
     const matchLecturer = !selectedLecturer || (item.lecturer && item.lecturer.includes(selectedLecturer));
 
-    // กรองคำค้นหา
+    // คำค้นหา
     const matchSearch = !query || 
                         (item.topic && item.topic.toLowerCase().includes(query)) ||
                         (item.lecturer && item.lecturer.toLowerCase().includes(query)) ||
