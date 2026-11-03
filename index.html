@@ -38,7 +38,7 @@
     }
 
     .container { 
-      max-width: 1050px; 
+      max-width: 1100px; 
       margin: 0 auto; 
     }
 
@@ -66,7 +66,7 @@
       font-weight: 300;
     }
 
-    /* Filter Controls Panel */
+    /* Filter Controls Panel (ปรับ Responsive เป็น 5 ช่องกรอง) */
     .filter-panel {
       background: #ffffff;
       border: 1px solid var(--border-color);
@@ -74,7 +74,7 @@
       padding: 20px;
       margin-bottom: 20px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 16px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
@@ -86,7 +86,7 @@
     }
 
     label { 
-      font-size: 0.95rem; 
+      font-size: 0.9rem; 
       font-weight: 600; 
       color: var(--primary-navy); 
     }
@@ -95,7 +95,7 @@
       padding: 10px 12px;
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       outline: none;
       background: #ffffff;
       color: var(--text-main);
@@ -114,7 +114,7 @@
       padding: 20px;
       margin-bottom: 24px;
       box-shadow: 0 2px 4px rgba(2, 132, 199, 0.08);
-      display: none; /* ซ่อนไว้ก่อน จะแสดงเมื่อเลือกกลุ่มย่อย */
+      display: none;
     }
 
     .group-info-header {
@@ -127,7 +127,7 @@
     }
 
     .group-info-title {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: var(--primary-navy);
     }
@@ -168,7 +168,7 @@
 
     /* Summary Bar */
     .summary { 
-      font-size: 1rem; 
+      font-size: 0.95rem; 
       color: var(--text-muted); 
       margin-bottom: 20px; 
       display: flex; 
@@ -189,7 +189,7 @@
     .week-header {
       background: var(--primary-navy);
       color: #ffffff;
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 700;
       padding: 12px 18px;
       border-radius: 6px;
@@ -232,13 +232,13 @@
 
     .time-col { 
       font-weight: 700; 
-      font-size: 1.05rem; 
+      font-size: 1rem; 
       color: var(--primary-navy); 
     }
 
     .topic-col h3 { 
       margin: 0 0 6px 0; 
-      font-size: 1.1rem; 
+      font-size: 1.05rem; 
       font-weight: 600; 
       line-height: 1.4; 
       color: var(--text-main);
@@ -246,14 +246,14 @@
 
     .lecturer-name { 
       color: var(--text-muted); 
-      font-size: 0.95rem; 
+      font-size: 0.92rem; 
     }
 
     /* Badges / Formats */
     .badge {
       font-size: 0.85rem;
       font-weight: 600;
-      padding: 6px 12px;
+      padding: 5px 12px;
       border: 1px solid var(--border-color);
       border-radius: 4px;
       background: #f1f5f9;
@@ -263,13 +263,13 @@
 
     .badge-exam { border-color: #991b1b; color: #991b1b; background: #fef2f2; }
     .badge-group { border-color: #0284c7; color: #0284c7; background: #e0f2fe; }
+    .badge-area { border-color: #15803d; color: #15803d; background: #f0fdf4; }
     .badge-online { border-color: #c2410c; color: #c2410c; background: #fff7ed; }
-    .badge-field { border-color: #15803d; color: #15803d; background: #f0fdf4; }
 
     @media (max-width: 768px) {
       .card { grid-template-columns: 1fr; gap: 10px; }
-      .time-col { font-size: 1rem; }
-      .topic-col h3 { font-size: 1.05rem; }
+      .time-col { font-size: 0.95rem; }
+      .topic-col h3 { font-size: 1rem; }
     }
   </style>
 </head>
@@ -281,7 +281,7 @@
     <p class="subtitle">ดึงข้อมูลจากไฟล์ CSV อัตโนมัติ — ซิงก์ตรงจาก Google Sheets</p>
   </header>
 
-  <!-- แถบควบคุมการกรอง -->
+  <!-- แถบควบคุมการกรองข้อมูล (5 ตัวเลือก) -->
   <div class="filter-panel">
     <div class="filter-group">
       <label for="yearFilter">1. เลือกชั้นปี</label>
@@ -292,9 +292,9 @@
     </div>
 
     <div class="filter-group">
-      <label for="groupFilter">2. กลุ่มย่อยของฉัน</label>
+      <label for="groupFilter">2. กลุ่ม Discussion (6 กลุ่ม)</label>
       <select id="groupFilter">
-        <option value="all">-- แสดงทุกกลุ่ม (ภาพรวม) --</option>
+        <option value="all">-- ทุกกลุ่ม Discussion --</option>
         <option value="1">กลุ่ม 1</option>
         <option value="2">กลุ่ม 2</option>
         <option value="3">กลุ่ม 3</option>
@@ -304,8 +304,27 @@
       </select>
     </div>
 
+    <!-- 📍 ตัวเลือกกรองกลุ่มพื้นที่ (1 - 11 กลุ่ม) ที่เพิ่มเข้ามาใหม่ -->
     <div class="filter-group">
-      <label for="lecturerFilter">3. กรองตามอาจารย์</label>
+      <label for="areaFilter">3. กลุ่มพื้นที่ (11 กลุ่ม)</label>
+      <select id="areaFilter">
+        <option value="all">-- ทุกกลุ่มพื้นที่ --</option>
+        <option value="1">กลุ่มพื้นที่ 1</option>
+        <option value="2">กลุ่มพื้นที่ 2</option>
+        <option value="3">กลุ่มพื้นที่ 3</option>
+        <option value="4">กลุ่มพื้นที่ 4</option>
+        <option value="5">กลุ่มพื้นที่ 5</option>
+        <option value="6">กลุ่มพื้นที่ 6</option>
+        <option value="7">กลุ่มพื้นที่ 7</option>
+        <option value="8">กลุ่มพื้นที่ 8</option>
+        <option value="9">กลุ่มพื้นที่ 9</option>
+        <option value="10">กลุ่มพื้นที่ 10</option>
+        <option value="11">กลุ่มพื้นที่ 11</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="lecturerFilter">4. กรองตามอาจารย์</label>
       <select id="lecturerFilter">
         <option value="">-- อาจารย์ทั้งหมด --</option>
         <option value="สัมฤทธิ์">ผศ. นพ.สัมฤทธิ์ ศรีธำรงสวัสดิ์</option>
@@ -318,31 +337,27 @@
         <option value="พีรสิชฌ์">นพ. พีรสิชฌ์ สิทธิรัตน์</option>
         <option value="จักรกฤษณ์">อ. นพ.จักรกฤษณ์ เอื้อสุนทรวัฒนา</option>
         <option value="สวนีย์">อ. พญ.สวนีย์ ศรีเจริญธรรม</option>
-        <option value="ปวินท์">อ. ปวินท์</option>
-        <option value="วิชัย">ศ. วิชัย</option>
+        <option value="ปวินท์">อ. ปวินท์ ศรีวิเชียร</option>
+        <option value="วิชัย">ศ. วิชัย เอกพลากร</option>
         <option value="ฉัฐญาณ์">ผศ. พญ.ฉัฐญาณ์ วงศ์รัฐนันท์</option>
         <option value="วิชช์">ผศ. นพ.วิชช์ เกษมทรัพย์</option>
       </select>
     </div>
 
     <div class="filter-group">
-      <label for="searchInput">4. ค้นหาคำ/วิชา</label>
-      <input type="text" id="searchInput" placeholder="พิมพ์ชื่อวิชา หัวข้อ หรือชื่ออาจารย์...">
+      <label for="searchInput">5. ค้นหาคำ/ห้อง/วิชา</label>
+      <input type="text" id="searchInput" placeholder="พิมพ์ชื่อวิชา ห้องเรียน หรืออาจารย์...">
     </div>
   </div>
 
-  <!-- 📍 กล่องแสดงสรุปข้อมูลกลุ่มย่อยและรายชื่อเพื่อนร่วมกลุ่ม -->
+  <!-- 📍 กล่องแสดงสรุปข้อมูลกลุ่มย่อย -->
   <div class="group-info-card" id="groupInfoCard">
     <div class="group-info-header">
-      <div class="group-info-title" id="groupTitle">สรุปข้อมูลกลุ่มย่อย</div>
+      <div class="group-info-title" id="groupTitle">สรุปข้อมูลกลุ่ม</div>
       <button class="btn-toggle-roster" onclick="toggleRosterView()">👥 ดูรายชื่อสมาชิกในกลุ่ม (<span id="studentCount">0</span> คน)</button>
     </div>
-    <div id="groupDetails">
-      <!-- ข้อมูลอาจารย์ที่ปรึกษาประจำกลุ่มจะแสดงตรงนี้ -->
-    </div>
-    <div class="student-roster-grid" id="studentRosterGrid" style="display: none;">
-      <!-- รายชื่อนักศึกษาจะถูกดึงมาแสดงตรงนี้ -->
-    </div>
+    <div id="groupDetails"></div>
+    <div class="student-roster-grid" id="studentRosterGrid" style="display: none;"></div>
   </div>
 
   <div class="summary">
@@ -355,18 +370,18 @@
 
 <script>
 // *** ลิงก์ CSV Publish to Web จาก Google Sheets ของคุณ ***
-const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTVCp6_8XOpTvWsEDQIKVjl-0VNK5gwlXXbIbtrrOlb80CYjon9cTJf5-W-al76r7bLG5gP21NInkz7/pub?gid=1642042382&single=true&output=csv'; 
+const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTVCp6_8XOpTvWsEDQIKVjl-0VNK5gwlXXbIbtrrOlb80CYjon9cTJf5-W-al76r7bLG5gP21NInkz7/pub?output=csv'; 
 
 let allScheduleData = [];
 
-// ตัวอย่างสถิตินักศึกษาสำหรับการแมปหน้าเว็บ (สามารถดึงจาก CSV Sheet 2 ได้)
+// ตัวอย่างสถิตินักศึกษาสำหรับการแมปหน้าเว็บ
 const sampleStudents = [
-  { id: "6709001", name: "นักศึกษาแพทย์ สมมติ_1", group: "1" },
-  { id: "6709002", name: "นักศึกษาแพทย์ สมมติ_2", group: "2" },
-  { id: "6709003", name: "นักศึกษาแพทย์ สมมติ_3", group: "3" },
-  { id: "6709004", name: "นักศึกษาแพทย์ สมมติ_4", group: "4" },
-  { id: "6709005", name: "นักศึกษาแพทย์ สมมติ_5", group: "5" },
-  { id: "6709006", name: "นักศึกษาแพทย์ สมมติ_6", group: "6" }
+  { id: "6709001", name: "นักศึกษาแพทย์ สมมติ_1", discGroup: "1", areaGroup: "1" },
+  { id: "6709002", name: "นักศึกษาแพทย์ สมมติ_2", discGroup: "2", areaGroup: "2" },
+  { id: "6709003", name: "นักศึกษาแพทย์ สมมติ_3", discGroup: "3", areaGroup: "3" },
+  { id: "6709004", name: "นักศึกษาแพทย์ สมมติ_4", discGroup: "4", areaGroup: "4" },
+  { id: "6709005", name: "นักศึกษาแพทย์ สมมติ_5", discGroup: "5", areaGroup: "5" },
+  { id: "6709006", name: "นักศึกษาแพทย์ สมมติ_6", discGroup: "6", areaGroup: "6" }
 ];
 
 // ดึงข้อมูล CSV ผ่าน PapaParse
@@ -377,7 +392,7 @@ function loadCSVData() {
     skipEmptyLines: true,
     complete: function(results) {
       allScheduleData = results.data;
-      renderSchedule(); // เรนเดอร์หน้าเว็บเมื่อโหลดข้อมูลเสร็จ
+      renderSchedule();
     },
     error: function(err) {
       document.getElementById('resultCount').textContent = 'เกิดข้อผิดพลาดในการโหลดข้อมูล CSV';
@@ -388,11 +403,11 @@ function loadCSVData() {
 function renderSchedule() {
   const selectedYear = document.getElementById('yearFilter').value;
   const selectedGroup = document.getElementById('groupFilter').value;
+  const selectedAreaGroup = document.getElementById('areaFilter').value; // ค่ากลุ่มพื้นที่ที่เลือก
   const selectedLecturer = document.getElementById('lecturerFilter').value;
   const query = document.getElementById('searchInput').value.toLowerCase().trim();
 
-  // อัปเดตกล่องแสดงรายชื่อกลุ่มย่อย
-  updateGroupInfoCard(selectedGroup);
+  updateGroupInfoCard(selectedGroup, selectedAreaGroup);
 
   const container = document.getElementById('scheduleContainer');
   container.innerHTML = "";
@@ -404,18 +419,24 @@ function renderSchedule() {
     // 1. กรองตามชั้นปี
     const matchYear = !item.year || item.year === selectedYear;
     
-    // 2. กรองตามกลุ่มนักศึกษา
-    const matchGroup = (selectedGroup === 'all') || (item.groupId === 'all' || item.groupId === selectedGroup);
+    // 2. กรองตามกลุ่ม Discussion (groupId / discGroup)
+    const matchGroup = (selectedGroup === 'all') || 
+                       (item.groupId === 'all' || item.groupId === selectedGroup || item.discGroup === selectedGroup);
 
-    // 3. กรองตามอาจารย์
+    // 3. กรองตามกลุ่มพื้นที่ (areaGroup) - 📍 เพิ่มการกรองส่วนนี้
+    const matchArea = (selectedAreaGroup === 'all') || 
+                      (!item.areaGroup || item.areaGroup === 'all' || item.areaGroup === selectedAreaGroup);
+
+    // 4. กรองตามอาจารย์
     const matchLecturer = !selectedLecturer || (item.lecturer && item.lecturer.includes(selectedLecturer));
 
-    // 4. กรองตามคำค้นหา
+    // 5. กรองตามคำค้นหา (ค้นหาชื่อวิชา อาจารย์ หรือห้องเรียน)
     const matchSearch = !query || 
                         (item.topic && item.topic.toLowerCase().includes(query)) ||
-                        (item.lecturer && item.lecturer.toLowerCase().includes(query));
+                        (item.lecturer && item.lecturer.toLowerCase().includes(query)) ||
+                        (item.room && item.room.toLowerCase().includes(query));
 
-    if (matchYear && matchGroup && matchLecturer && matchSearch) {
+    if (matchYear && matchGroup && matchArea && matchLecturer && matchSearch) {
       count++;
 
       // 📌 1. เช็กเปลี่ยนสัปดาห์ -> ขึ้นแถบสัปดาห์สีน้ำเงินเข้ม
@@ -442,21 +463,26 @@ function renderSchedule() {
       card.className = "card";
       
       let badgeHtml = `<span class="badge">[ ${item.format || 'Onsite'} ]</span>`;
-      if (item.groupId && item.groupId !== 'all') {
-        badgeHtml = `<span class="badge badge-group">[ กลุ่มย่อย ${item.groupId} ]</span>`;
+      
+      if (item.areaGroup && item.areaGroup !== 'all') {
+        badgeHtml = `<span class="badge badge-area">[ พื้นที่กลุ่ม ${item.areaGroup} ]</span>`;
+      } else if (item.groupId && item.groupId !== 'all') {
+        badgeHtml = `<span class="badge badge-group">[ Discussion กลุ่ม ${item.groupId} ]</span>`;
       } else if (item.format === 'Exam') {
         badgeHtml = `<span class="badge badge-exam">[ สอบ ]</span>`;
       } else if (item.format === 'Online') {
         badgeHtml = `<span class="badge badge-online">[ Online ]</span>`;
       } else if (item.format === 'Field') {
-        badgeHtml = `<span class="badge badge-field">[ ออกภาคสนาม ]</span>`;
+        badgeHtml = `<span class="badge badge-area">[ ออกภาคสนาม ]</span>`;
       }
+
+      const roomInfo = item.room ? ` | 📍 ห้อง: ${item.room}` : '';
 
       card.innerHTML = `
         <div class="time-col">⏱️ ${item.time || ''}</div>
         <div class="topic-col">
           <h3>${item.topic || ''}</h3>
-          <div class="lecturer-name">👤 ผู้สอน: ${item.lecturer || '-'}</div>
+          <div class="lecturer-name">👤 ผู้สอน: ${item.lecturer || '-'}${roomInfo}</div>
         </div>
         <div>${badgeHtml}</div>
       `;
@@ -467,24 +493,32 @@ function renderSchedule() {
   document.getElementById('resultCount').textContent = `แสดงผลทั้งสิ้น ${count} รายการ (${selectedYear})`;
 }
 
-// 📌 ฟังก์ชันอัปเดตข้อมูลกลุ่มย่อย
-function updateGroupInfoCard(group) {
+// 📌 ฟังก์ชันอัปเดตกล่องสรุปข้อมูลกลุ่มย่อย
+function updateGroupInfoCard(discGroup, areaGroup) {
   const card = document.getElementById('groupInfoCard');
-  if (group === 'all') {
+  if (discGroup === 'all' && areaGroup === 'all') {
     card.style.display = 'none';
     return;
   }
 
   card.style.display = 'block';
-  document.getElementById('groupTitle').textContent = `📌 ข้อมูลสมาชิก & อาจารย์ประจำกลุ่มย่อย ${group}`;
+  let titleText = '📌 สรุปข้อมูลกลุ่มที่เลือก: ';
+  if (discGroup !== 'all') titleText += `Discussion กลุ่ม ${discGroup} `;
+  if (areaGroup !== 'all') titleText += `| พื้นที่ กลุ่ม ${areaGroup}`;
+
+  document.getElementById('groupTitle').textContent = titleText;
   
-  const members = sampleStudents.filter(s => s.group === group);
+  const members = sampleStudents.filter(s => 
+    (discGroup === 'all' || s.discGroup === discGroup) && 
+    (areaGroup === 'all' || s.areaGroup === areaGroup)
+  );
+  
   document.getElementById('studentCount').textContent = members.length;
 
   const rosterGrid = document.getElementById('studentRosterGrid');
   rosterGrid.innerHTML = members.length > 0 
-    ? members.map(s => `<div class="student-item">🆔 ${s.id} - ${s.name}</div>`).join('')
-    : '<div style="font-size:0.9rem; color:#64748b;">ยังไม่มีข้อมูลรายชื่อในกลุ่มนี้</div>';
+    ? members.map(s => `<div class="student-item">🆔 ${s.id} - ${s.name} (Disc:${s.discGroup}/พื้นที่:${s.areaGroup})</div>`).join('')
+    : '<div style="font-size:0.9rem; color:#64748b;">ยังไม่มีข้อมูลรายชื่อนักศึกษาในเงื่อนไขกลุ่มนี้</div>';
 }
 
 function toggleRosterView() {
@@ -495,6 +529,7 @@ function toggleRosterView() {
 // Event Listeners สำหรับระบบกรอง
 document.getElementById('yearFilter').addEventListener('change', renderSchedule);
 document.getElementById('groupFilter').addEventListener('change', renderSchedule);
+document.getElementById('areaFilter').addEventListener('change', renderSchedule);
 document.getElementById('lecturerFilter').addEventListener('change', renderSchedule);
 document.getElementById('searchInput').addEventListener('input', renderSchedule);
 
